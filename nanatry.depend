@@ -1,0 +1,64 @@
+# depslib dependency file v1.0
+1468138992 source:c:\users\umiz\documents\workspace\nanatry\main.cpp
+	<nana/gui.hpp>
+	<nana/gui/widgets/menubar.hpp>
+	<nana/gui/wvl.hpp>
+	<nana/gui/widgets/button.hpp>
+	<nana/gui/dragger.hpp>
+	<nana/gui/widgets/textbox.hpp>
+	<nana/gui/msgbox.hpp>
+	<nana/gui/filebox.hpp>
+	<string>
+	"Desk.h"
+
+1463285626 c:\users\umiz\documents\workspace\nanatry\include\win0.h
+	<nana/gui.hpp>
+	<nana/gui/place.hpp>
+	<nana/gui/widgets/menubar.hpp>
+	<nana/gui/wvl.hpp>
+	<nana/gui/widgets/button.hpp>
+	<nana/gui/dragger.hpp>
+
+1463290739 source:c:\users\umiz\documents\workspace\nanatry\src\win0.cpp
+	"Win0.h"
+
+1468163903 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
+	"CodeEditor.h"
+	"Desk.h"
+
+1468163764 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
+	<nana/gui.hpp>
+	<nana/gui/widgets/menubar.hpp>
+	<nana/gui/wvl.hpp>
+	<nana/gui/widgets/textbox.hpp>
+	<nana/gui/msgbox.hpp>
+	<nana/gui/filebox.hpp>
+	<string>
+	<fstream>
+	<vector>
+	"Block.h"
+
+1468162666 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+	"Desk.h"
+
+1468162642 c:\users\umiz\documents\workspace\nanatry\include\desk.h
+	<nana/gui.hpp>
+	<nana/gui/place.hpp>
+	<nana/gui/widgets/menubar.hpp>
+	<nana/gui/widgets/button.hpp>
+	<nana/gui/dragger.hpp>
+	<vector>
+	<stdlib.h>
+	<fstream>
+	"CodeEditor.h"
+	"Block.h"
+
+1468161592 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
+	"Block.h"
+
+1468163846 c:\users\umiz\documents\workspace\nanatry\include\block.h
+	<nana/gui.hpp>
+	<nana/gui/widgets/button.hpp>
+	<string>
+	<vector>
+
