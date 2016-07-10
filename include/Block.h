@@ -12,6 +12,9 @@ class Block:  public button
         int id;
         string name;
         Block(int index);
+        void setName(string s);
+        string getFileName();
+        bool isEmpty();
         virtual ~Block();
     protected:
 

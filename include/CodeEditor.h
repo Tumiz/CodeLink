@@ -19,7 +19,7 @@ class CodeEditor: public form
     textbox textbox_{*this};
     Block* blk;
 public:
-    CodeEditor(void* p,int id);
+    CodeEditor(Block* p);
     virtual ~CodeEditor();
 protected:
 

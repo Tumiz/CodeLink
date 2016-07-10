@@ -1,9 +1,9 @@
 #include "CodeEditor.h"
-#include "Desk.h"
-CodeEditor::CodeEditor(void* p,int id)
+CodeEditor::CodeEditor(Block* p)
 {
-    Desk* desk=(Desk*)p;
-    blk=desk->blockset[id];
+    blk=p;
+    if(!blk->name.empty())
+        textbox_.load(blk->getFileName());
     textbox_.borderless(true);
     API::effects_edge_nimbus(textbox_, effects::edge_nimbus::none);
     textbox_.enable_dropfiles(true);
@@ -51,7 +51,7 @@ bool CodeEditor::_m_ask_save()
             break;
         case msgbox::pick_no:
             break;
-        case msgbox::pick_cancel:
+        default:
             return false;
         }
     }
@@ -68,7 +68,7 @@ void CodeEditor::_m_make_menus()
             auto fs = _m_pick_file(true);
             if (fs.size())
                 textbox_.load(fs.data());
-            caption(fs);
+            caption(blk->name);
         }
     });
     menubar_.at(0).append("Apply", [this](menu::item_proxy&)
@@ -79,14 +79,13 @@ void CodeEditor::_m_make_menus()
         textbox_.getline(0,s);
         vector<string> s1=split(s,"(");
         vector<string> s2=split(s1[0]," ");
-        blk->name=s2[s2.size()-1];
-        fs=blk->name+".cpp";
-        if(!blk->name.empty())
+        blk->setName(s2[s2.size()-1]);
+        fs=blk->getFileName();
+        if(!blk->isEmpty())
         {
             ofstream ofs(fs.c_str());
             ofs.close();
             caption(blk->name);
-            blk->caption(blk->name);
         }
         textbox_.store(fs.data());
     });

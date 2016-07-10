@@ -16,6 +16,10 @@
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
+				<ResourceCompiler>
+					<Add directory="../../../Downloads/nana 1.3.0/nana/source" />
+					<Add directory="../../../Downloads/nana 1.3.0/nana/source/gui" />
+				</ResourceCompiler>
 				<Linker>
 					<Add option="-lnana -lgdi32 -lcomdlg32" />
 				</Linker>
@@ -39,7 +43,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Block.h" />
+		<Unit filename="include/CodeEditor.h" />
+		<Unit filename="include/Desk.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Block.cpp" />
+		<Unit filename="src/CodeEditor.cpp" />
+		<Unit filename="src/Desk.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

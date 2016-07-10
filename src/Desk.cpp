@@ -14,11 +14,10 @@ Desk::Desk()
         blk.create(fm, rectangle(10+rand()%100, 50+rand()%100, 80, 20));
         stringstream blkname;
         blkname<<"block"<<blk.id;
-        blk.name=blkname.str();
-        blk.caption(blk.name);
-        blk.events().click([&]()
+        blk.setName(blkname.str());
+        blk.events().dbl_click([&]()
         {
-            CodeEditor ce(this,blk.id);
+            CodeEditor ce(&blk);
             ce.caption(blk.name);
             ce.show();
             exec();
