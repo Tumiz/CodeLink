@@ -26,7 +26,6 @@ Desk::Desk()
             }
             ofs.close();
         }
-
     });
     mn.at(0).append("Save as",[this](menu::item_proxy& ip)
     {
