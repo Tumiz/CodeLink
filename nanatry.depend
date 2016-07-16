@@ -22,11 +22,10 @@
 1463290739 source:c:\users\umiz\documents\workspace\nanatry\src\win0.cpp
 	"Win0.h"
 
-1468163903 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
+1468660160 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
 	"CodeEditor.h"
-	"Desk.h"
 
-1468167300 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
+1468250884 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
 	<nana/gui.hpp>
 	<nana/gui/widgets/menubar.hpp>
 	<nana/gui/wvl.hpp>
@@ -37,11 +36,12 @@
 	<fstream>
 	<vector>
 	"Block.h"
+	"Xstr.h"
 
-1468169782 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1468657867 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 
-1468162642 c:\users\umiz\documents\workspace\nanatry\include\desk.h
+1468662958 c:\users\umiz\documents\workspace\nanatry\include\desk.h
 	<nana/gui.hpp>
 	<nana/gui/place.hpp>
 	<nana/gui/widgets/menubar.hpp>
@@ -50,15 +50,30 @@
 	<vector>
 	<stdlib.h>
 	<fstream>
+	<iostream>
 	"CodeEditor.h"
 	"Block.h"
 
-1468169149 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
+1468658550 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
 	"Block.h"
 
-1468169114 c:\users\umiz\documents\workspace\nanatry\include\block.h
+1468656759 c:\users\umiz\documents\workspace\nanatry\include\block.h
 	<nana/gui.hpp>
 	<nana/gui/widgets/button.hpp>
 	<string>
 	<vector>
+
+1468245496 c:\users\umiz\documents\workspace\nanatry\include\xstring.h
+	<vector>
+	<string>
+
+1468243833 source:c:\users\umiz\documents\workspace\nanatry\src\xstring.cpp
+	"xstring.h"
+
+1468248063 c:\users\umiz\documents\workspace\nanatry\include\xstr.h
+	<vector>
+	<string>
+
+1468246361 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
+	"Xstr.h"
 

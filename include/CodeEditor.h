@@ -10,14 +10,23 @@
 #include <fstream>
 #include <vector>
 #include "Block.h"
+#include "Xstr.h"
 using namespace nana;
 using namespace std;
 class CodeEditor: public form
 {
+    enum FirstLine
+    {
+        Empty,
+        NoParent,
+        NoReturnType,
+        OK
+    };
     place   place_  {*this};
     menubar menubar_{*this};
     textbox textbox_{*this};
     Block* blk;
+    string error;
 public:
     CodeEditor(Block* p);
     virtual ~CodeEditor();
@@ -27,7 +36,7 @@ private:
     string _m_pick_file(bool is_open) const;
     bool _m_ask_save();
     void _m_make_menus();
-    vector<string> split(string s,string delim);
+    string readFirstLine();
 };
 
 #endif // CODEEDITOR_H

@@ -11,10 +11,11 @@ class Block:  public button
     public:
         int id;
         string name;
-        Block(int index);
+        string getName();
         void setName(string s);
         string getFileName();
         bool isEmpty();
+        Block();
         virtual ~Block();
     protected:
 

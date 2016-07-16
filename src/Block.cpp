@@ -1,18 +1,19 @@
 #include "Block.h"
-
-Block::Block(int index)
+Block::Block()
 {
-    id=index;
+
+}
+string Block::getName()
+{
+    return name;
 }
 void Block::setName(string s)
 {
-    if(!s.empty())
+    if(s!="")
     {
-        name=s;
+         name=s;
         caption(s);
     }
-    else
-        fgcolor(colors::red);
 }
 string Block::getFileName()
 {

@@ -2,7 +2,7 @@
 CodeEditor::CodeEditor(Block* p)
 {
     blk=p;
-    if(!blk->name.empty())
+    if(!blk->getName().empty())
         textbox_.load(blk->getFileName());
     textbox_.borderless(true);
     API::effects_edge_nimbus(textbox_, effects::edge_nimbus::none);
@@ -25,9 +25,12 @@ CodeEditor::CodeEditor(Block* p)
         if (!_m_ask_save())
             arg.cancel = true;
     });
+    caption(blk->name);
+    show();
+    exec();
 }
 
-std::string CodeEditor::_m_pick_file(bool is_open) const
+string CodeEditor::_m_pick_file(bool is_open) const
 {
     filebox fbox(*this, is_open);
     fbox.add_filter("Text", "*.cpp");
@@ -61,33 +64,32 @@ bool CodeEditor::_m_ask_save()
 void CodeEditor::_m_make_menus()
 {
     menubar_.push_back("&FILE");
-    menubar_.at(0).append("Open", [this](menu::item_proxy& ip)
+    menubar_.at(0).append("Load", [this](menu::item_proxy& ip)
     {
         if (_m_ask_save())
         {
             auto fs = _m_pick_file(true);
             if (fs.size())
                 textbox_.load(fs.data());
-            caption(blk->name);
+            string ret=readFirstLine();
+            blk->setName(ret);
+            caption(blk->name+error);
         }
     });
     menubar_.at(0).append("Apply", [this](menu::item_proxy&)
     {
-
-        auto fs = textbox_.filename();
-        string s;
-        textbox_.getline(0,s);
-        vector<string> s1=split(s,"(");
-        vector<string> s2=split(s1[0]," ");
-        blk->setName(s2[s2.size()-1]);
-        fs=blk->getFileName();
-        if(!blk->isEmpty())
+        string ret=readFirstLine();
+        if(ret.empty())
         {
-            ofstream ofs(fs.c_str());
-            ofs.close();
-            caption(blk->name);
+            blk->bgcolor(colors::red);
         }
-        textbox_.store(fs.data());
+        else
+        {
+            blk->bgcolor(colors::white);
+            blk->setName(ret);
+            textbox_.store(blk->getFileName());
+        }
+        caption(blk->name+error);
     });
 
     menubar_.push_back("F&ORMAT");
@@ -97,23 +99,32 @@ void CodeEditor::_m_make_menus()
     });
     menubar_.at(1).check_style(0, menu::checks::highlight);
 }
-vector<string> CodeEditor::split(string s,string delim)
+string CodeEditor::readFirstLine()
 {
-    vector<string> ret;
-    size_t last = 0;
-    size_t index=s.find_first_of(delim,last);
-    while (index!=string::npos)
+    error="";
+    string s;
+    textbox_.getline(0,s);
+    if(s.empty())
     {
-        ret.push_back(s.substr(last,index-last));
-        last=index+1;
-        index=s.find_first_of(delim,last);
+        error= " -Empty";
+        return "";
     }
-    if (index-last>0)
-        ret.push_back(s.substr(last,index-last));
-    return ret;
+    Xstr X;
+    vector<string> s1=X.split(s,"(");
+    if(s1.size()==1)
+    {
+        error= " -No ( or )";
+        return "";
+    }
+    vector<string> s2=X.split(s1[0]," ");
+    if(s2.size()==1||s2[0].empty())
+    {
+        error= " -No return type";
+        return "";
+    }
+    string result=s2[s2.size()-1];
+    return result;
 }
-
-
 CodeEditor::~CodeEditor()
 {
     //dtor
