@@ -22,7 +22,8 @@ Desk::Desk()
             ofstream ofs(file);
             for(size_t i=0; i<blockset.size(); i++)
             {
-                ofs<<blockset[i]->name<<endl;
+                point p=blockset[i]->pos();
+                ofs<<blockset[i]->name<<','<<p.x<<','<<p.y<<endl;
             }
             ofs.close();
         }
@@ -54,7 +55,7 @@ Desk::Desk()
     mn.push_back("Run");
     mn.at(2).append("Run",[this](menu::item_proxy& ip)
     {
-        size_t dotpos=file.find(".txt");
+        size_t dotpos=file.find(".csv");
         string name=file.erase(dotpos,4);
         system(("g++ "+name+".cpp -o gen").c_str());
     });
@@ -65,7 +66,7 @@ Desk::Desk()
 string Desk::pickFile(bool is_open) const
 {
     filebox fbox(is_open);
-    fbox.add_filter("Text", "*.txt");
+    fbox.add_filter("Text", "*.csv");
     fbox.add_filter("All Files", "*.*");
     return (fbox.show() ? fbox.file() : "" );
 }
@@ -102,11 +103,16 @@ void Desk::loadFile(string fs)
         dragset.clear();
     }
     ifstream ifs(fs.c_str());
-    string blkname;
-    while(ifs>>blkname)
+    string blkinfo;
+    while(ifs>>blkinfo)
     {
-        createBlock(blkname,10+rand()%100, 50+rand()%100, 80, 20);
-        cout<<blkname<<endl;
+        Xstr xstr;
+        string name;
+        int x,y;
+        stringstream ssinfo(xstr.replace(blkinfo,","," "));
+        ssinfo>>name>>x>>y;
+        createBlock(name,x, y, 80, 20);
+        cout<<name<<endl;
     }
     exec();
 }

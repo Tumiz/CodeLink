@@ -11,7 +11,7 @@ void Block::setName(string s)
 {
     if(s!="")
     {
-         name=s;
+        name=s;
         caption(s);
     }
 }

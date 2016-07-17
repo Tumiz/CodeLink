@@ -8,6 +8,7 @@
 #include <nana/gui/filebox.hpp>
 #include <string>
 #include <fstream>
+#include <iostream>
 #include <vector>
 #include "Block.h"
 #include "Xstr.h"
@@ -36,7 +37,7 @@ private:
     string _m_pick_file(bool is_open) const;
     bool _m_ask_save();
     void _m_make_menus();
-    string readFirstLine();
+    BlockInfo readFirstLine();
 };
 
 #endif // CODEEDITOR_H

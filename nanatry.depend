@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1468138992 source:c:\users\umiz\documents\workspace\nanatry\main.cpp
+1468734576 source:c:\users\umiz\documents\workspace\nanatry\main.cpp
 	<nana/gui.hpp>
 	<nana/gui/widgets/menubar.hpp>
 	<nana/gui/wvl.hpp>
@@ -22,10 +22,10 @@
 1463290739 source:c:\users\umiz\documents\workspace\nanatry\src\win0.cpp
 	"Win0.h"
 
-1468660160 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
+1468769441 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
 	"CodeEditor.h"
 
-1468250884 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
+1468746844 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
 	<nana/gui.hpp>
 	<nana/gui/widgets/menubar.hpp>
 	<nana/gui/wvl.hpp>
@@ -34,11 +34,12 @@
 	<nana/gui/filebox.hpp>
 	<string>
 	<fstream>
+	<iostream>
 	<vector>
 	"Block.h"
 	"Xstr.h"
 
-1468657867 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1468735970 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 
 1468662958 c:\users\umiz\documents\workspace\nanatry\include\desk.h
@@ -54,10 +55,10 @@
 	"CodeEditor.h"
 	"Block.h"
 
-1468658550 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
+1468734648 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
 	"Block.h"
 
-1468656759 c:\users\umiz\documents\workspace\nanatry\include\block.h
+1468743578 c:\users\umiz\documents\workspace\nanatry\include\block.h
 	<nana/gui.hpp>
 	<nana/gui/widgets/button.hpp>
 	<string>
@@ -70,10 +71,20 @@
 1468243833 source:c:\users\umiz\documents\workspace\nanatry\src\xstring.cpp
 	"xstring.h"
 
-1468248063 c:\users\umiz\documents\workspace\nanatry\include\xstr.h
+1468770129 c:\users\umiz\documents\workspace\nanatry\include\xstr.h
 	<vector>
 	<string>
+	<iostream>
 
-1468246361 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
+1468748648 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
 	"Xstr.h"
+
+1468734648 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
+	"Link.h"
+
+1468730022 c:\users\umiz\documents\workspace\nanatry\include\link.h
+	<nana/gui.hpp>
+	<nana/gui/drawing.hpp>
+	<nana/basic_types.hpp>
+	"Block.h"
 
