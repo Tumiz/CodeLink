@@ -14,7 +14,7 @@ class Xstr
         string voidspace(string src);
         vector<string> voidempty(vector<string> v);
         bool space(string s);
-        string print(vector<string> v);
+        string print(vector<string> v,string div="|");
     protected:
 
     private:

@@ -38,6 +38,7 @@ private:
     bool _m_ask_save();
     void _m_make_menus();
     BlockInfo readFirstLine();
+    void format();
 };
 
 #endif // CODEEDITOR_H

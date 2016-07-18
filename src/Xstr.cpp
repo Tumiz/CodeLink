@@ -53,20 +53,19 @@ vector<string> Xstr::voidempty(vector<string> v)
     }
     return o;
 }
-string Xstr::print(vector<string> v)
+string Xstr::print(vector<string> v,string div)
 {
-    string ret="[";
+    string ret="";
     for(size_t i=0; i<v.size() ; i++ )
     {
         if(i==0)
             ret+=v[i];
         else
-            ret+="|"+v[i];
+            ret+=div+v[i];
     }
-    ret+="]";
     return ret;
 }
-bool Xstr::space(string s)
+bool Xstr::space(string s)//empty is also true
 {
     for(size_t i=0; i<s.length(); i++)
     {
