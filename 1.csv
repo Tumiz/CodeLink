@@ -1,5 +1,5 @@
-and,57,54
-sum,41,113
-multi,178,107
-or,182,55
-sin,164,163
+and,57,54,bool,bool|bool
+sum,41,113,int,int|int
+multi,178,107,int,int|int
+or,182,55,bool,bool|bool
+sin,164,163,double,double

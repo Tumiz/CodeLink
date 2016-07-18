@@ -28,6 +28,7 @@ private:
     string pickFile(bool is_open) const;
     Block* createBlock(string s,int x,int y,int w,int h);
     void loadFile(string fs);
+    void saveFile(string fs);
 };
 
 #endif // DESK_H

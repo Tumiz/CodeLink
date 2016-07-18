@@ -66,7 +66,7 @@ bool CodeEditor::_m_ask_save()
 
 void CodeEditor::_m_make_menus()
 {
-    menubar_.push_back("&FILE");
+    menubar_.push_back("&File");
     menubar_.at(0).append("Load", [this](menu::item_proxy& ip)
     {
         if (_m_ask_save())
@@ -81,7 +81,8 @@ void CodeEditor::_m_make_menus()
     });
     menubar_.at(0).append("Apply", [this](menu::item_proxy&)
     {
-        string ret=readFirstLine().name;
+        blk->info=readFirstLine();
+        string ret=blk->info.name;
         if(ret.empty())
         {
             blk->bgcolor(colors::red);
@@ -98,7 +99,7 @@ void CodeEditor::_m_make_menus()
         }
         caption(blk->name+error);
     });
-    menubar_.push_back("F&ORMAT");
+    menubar_.push_back("F&ormat");
     menubar_.at(1).append("Line Wrap", [this](menu::item_proxy& ip)
     {
         textbox_.line_wrapped(ip.checked());
@@ -120,35 +121,38 @@ void CodeEditor::format()
     int decoded=0;
     for(int i=0; textbox_.getline(i,s); i++)
     {
-        if(!X.space(s)&&decoded==0)
+        if(!X.space(s))
         {
-            oki=X.split(s,"(");
-            cout<<"oki:"<<X.print(oki)<<endl;
-            vo=X.split(oki[0]," ");
-            cout<<"vo:"<<X.print(vo)<<endl;
-            vo=X.voidempty(vo);
-            cout<<"vo:"<<X.print(vo)<<endl;
-            string is=oki[1].substr(0,oki[1].find(")"));
-            vector<string> vis=X.split(is,",");
-            for(size_t i=0; i<vis.size(); i++)
+            if(!X.space(s)&&decoded==0)
             {
-                vector<string> v=X.split(vis[i]," ");
-                v=X.voidempty(v);
-                vi.push_back(v);
+                oki=X.split(s,"(");
+                cout<<"oki:"<<X.print(oki)<<endl;
+                vo=X.split(oki[0]," ");
+                cout<<"vo:"<<X.print(vo)<<endl;
+                vo=X.voidempty(vo);
+                cout<<"vo:"<<X.print(vo)<<endl;
+                string is=oki[1].substr(0,oki[1].find(")"));
+                vector<string> vis=X.split(is,",");
+                for(size_t i=0; i<vis.size(); i++)
+                {
+                    vector<string> v=X.split(vis[i]," ");
+                    v=X.voidempty(v);
+                    vi.push_back(v);
+                }
+                temp<<X.print(vo," ")<<"(";
+                for(size_t i=0; i<vi.size(); i++)
+                {
+                    if(i==0)
+                        temp<<X.print(vi[i]," ");
+                    else
+                        temp<<","<<X.print(vi[i]," ");
+                }
+                temp<<")";
+                decoded++;
             }
-            temp<<X.print(vo," ")<<"(";
-            for(size_t i=0; i<vi.size(); i++)
-            {
-                if(i==0)
-                    temp<<X.print(vi[i]," ");
-                else
-                    temp<<","<<X.print(vi[i]," ");
-            }
-            temp<<")";
-            decoded++;
+            else if(decoded>0)
+                temp<<endl<<s;
         }
-        else if(decoded>0)
-            temp<<endl<<s;
     }
     cout<<temp.str()<<endl<<"----------------------"<<endl;
     string fs=textbox_.filename();
@@ -210,7 +214,7 @@ BlockInfo CodeEditor::readFirstLine()
         }
     }
     cout<<"itypes:"<<X.print(blkinfo.itype)<<endl
-        <<"------------------------"<<endl;
+        <<"----------------------"<<endl;
     blkinfo.name=vo[vo.size()-1];
     blkinfo.otype=vo[vo.size()-2];
     return blkinfo;

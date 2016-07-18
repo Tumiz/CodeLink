@@ -18,26 +18,13 @@ Desk::Desk()
         if(file.empty())
             file=pickFile(false);
         else
-        {
-            ofstream ofs(file);
-            for(size_t i=0; i<blockset.size(); i++)
-            {
-                point p=blockset[i]->pos();
-                ofs<<blockset[i]->name<<','<<p.x<<','<<p.y<<endl;
-            }
-            ofs.close();
-        }
+            saveFile(file);
     });
     mn.at(0).append("Save as",[this](menu::item_proxy& ip)
     {
         file=pickFile(false);
         caption("CodeLink -"+file);
-        ofstream ofs(file);
-        for(size_t i=0; i<blockset.size(); i++)
-        {
-            ofs<<blockset[i]->name<<endl;
-        }
-        ofs.close();
+        saveFile(file);
     });
     mn.at(0).append("Exit",[](menu::item_proxy& ip)
     {
@@ -62,6 +49,18 @@ Desk::Desk()
     pl.collocate();
     show();
     exec();
+}
+void Desk::saveFile(string fs)
+{
+    Xstr x;
+    ofstream ofs(fs.c_str());
+    for(size_t i=0; i<blockset.size(); i++)
+    {
+        Block *b=blockset[i];
+        point p=blockset[i]->pos();
+        ofs<<b->name<<','<<p.x<<','<<p.y<<','<<b->info.otype<<','<<x.print(b->info.itype)<<endl;
+    }
+    ofs.close();
 }
 string Desk::pickFile(bool is_open) const
 {
@@ -111,8 +110,11 @@ void Desk::loadFile(string fs)
         int x,y;
         stringstream ssinfo(xstr.replace(blkinfo,","," "));
         ssinfo>>name>>x>>y;
-        createBlock(name,x, y, 80, 20);
-        cout<<name<<endl;
+        Block *b=createBlock(name,x, y, 80, 20);
+        string itypes;
+        ssinfo>>b->info.otype>>itypes;
+        b->info.itype=xstr.split(itypes,"|");
+        cout<<b->name<<','<<x<<','<<y<<','<<b->info.otype<<','<<xstr.print(b->info.itype)<<endl;
     }
     exec();
 }

@@ -20,6 +20,7 @@ class Block:  public button
         string itype;
         string otype;
         string getName();
+        BlockInfo info;
         void setName(string s);
         string getFileName();
         bool isEmpty();
