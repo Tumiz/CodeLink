@@ -15,7 +15,7 @@ void Link::connect(Block* blk1,Block* blk2)
     size ws1=API::window_size(w1);cout<<ws1.width<<" "<<ws1.height<<endl;
     size ws2=API::window_size(w2);cout<<ws2.width<<" "<<ws2.height<<endl;
     point po1=point(p1.x+ws1.width,p1.y+ws1.height/2);cout<<po1.x<<" "<<po1.y<<endl;
-    point po2=point(p2.x,ws2.height/2);cout<<po2.x<<" "<<po2.y<<endl;
+    point po2=point(p2.x,p2.y+ws2.height/2);cout<<po2.x<<" "<<po2.y<<endl;
     line(po1,po2);
 }
 void Link::line(point p1,point p2)

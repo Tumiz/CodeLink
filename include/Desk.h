@@ -21,6 +21,7 @@ public:
     virtual ~Desk();
     vector<Block*> blockset;
     int selectedBlock;
+    int preselctBlock;
     string file;
 protected:
 

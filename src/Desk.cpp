@@ -3,6 +3,7 @@ using namespace std;
 using namespace nana;
 Desk::Desk()
 {
+    preselctBlock=selectedBlock=0;
     caption(L"CodeLink");//name it
     place pl(*this);
     menubar mn(*this);
@@ -52,7 +53,7 @@ Desk::Desk()
     mn.at(1).append("Link",[this](menu::item_proxy& ip)
     {
         Link link(*this);
-        link.line(point(rand()%100,rand()%100),point(rand()%200,rand()%200));
+        link.connect(this->blockset[this->preselctBlock],this->blockset[this->selectedBlock]);
         link.update();
     });
     mn.at(1).append("Scope",[this](menu::item_proxy& ip)
@@ -102,8 +103,10 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
     });
     blk->events().click([this,blk]()
     {
+        this->preselctBlock=this->selectedBlock;
         this->selectedBlock=blk->id;
-        cout<<this->selectedBlock;
+        cout<<"curid:"<<this->selectedBlock<<endl
+        <<"preid:"<<this->preselctBlock<<endl;
     });
     blockset.push_back(blk);
     return blk;

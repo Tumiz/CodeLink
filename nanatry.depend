@@ -33,7 +33,7 @@
 1469256742 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 
-1469258255 c:\users\umiz\documents\workspace\nanatry\include\desk.h
+1469261756 c:\users\umiz\documents\workspace\nanatry\include\desk.h
 	<nana/gui.hpp>
 	<nana/gui/place.hpp>
 	<nana/gui/widgets/menubar.hpp>
