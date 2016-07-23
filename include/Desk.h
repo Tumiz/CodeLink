@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include "CodeEditor.h"
-#include "Block.h"
+#include "Link.h"
 using namespace nana;
 using namespace std;
 
@@ -20,7 +20,7 @@ public:
     Desk();
     virtual ~Desk();
     vector<Block*> blockset;
-    vector<dragger*> dragset;
+    int selectedBlock;
     string file;
 protected:
 
