@@ -1,16 +1,15 @@
 #ifndef DESK_H
 #define DESK_H
+#include <vector>
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
 #include <nana/gui.hpp>
 #include <nana/gui/place.hpp>
 #include <nana/gui/widgets/menubar.hpp>
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/dragger.hpp>
-#include <vector>
-#include <stdlib.h>
-#include <fstream>
-#include <iostream>
 #include "CodeEditor.h"
-#include "Link.h"
 #include "CodeLink.h"
 using namespace nana;
 using namespace std;

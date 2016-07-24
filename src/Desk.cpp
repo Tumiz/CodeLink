@@ -20,7 +20,9 @@ Desk::Desk()
             delete blockset[i];
         }
         blockset.clear();
-        show();
+        drawing d(*this);
+        d.clear();
+        d.update();
     });
     mn.at(0).append("Load",[this](menu::item_proxy& ip)
     {

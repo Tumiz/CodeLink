@@ -1,15 +1,15 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <vector>
 #include <nana/gui.hpp>
 #include <nana/gui/widgets/menubar.hpp>
 #include <nana/gui/wvl.hpp>
 #include <nana/gui/widgets/textbox.hpp>
 #include <nana/gui/msgbox.hpp>
 #include <nana/gui/filebox.hpp>
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <vector>
 #include "Block.h"
 #include "Xstr.h"
 using namespace nana;

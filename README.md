@@ -11,3 +11,5 @@ It is a big idea, I need more people to help me to realize it.
 ![github](https://github.com/Tumiz/CodeLink/raw/master/sample.PNG)
 ![github](https://github.com/Tumiz/CodeLink/raw/master/sample0.PNG)
 ![github](https://github.com/Tumiz/CodeLink/raw/master/sample1.PNG)
+![github](https://github.com/Tumiz/CodeLink/raw/master/sample.avi_1469365825.gif
+)

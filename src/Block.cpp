@@ -62,10 +62,6 @@ void Block::connect2(Block*& blk)
     d.update();
     exec();
 }
-void Block::link2(Block* blk)
-{
-
-}
 Block::~Block()
 {
     //dtor
