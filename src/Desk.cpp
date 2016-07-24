@@ -20,6 +20,7 @@ Desk::Desk()
             delete blockset[i];
         }
         blockset.clear();
+        show();
     });
     mn.at(0).append("Load",[this](menu::item_proxy& ip)
     {
@@ -52,7 +53,9 @@ Desk::Desk()
     });
     mn.at(1).append("Link",[this](menu::item_proxy& ip)
     {
-        Link link(*this,this->blockset[this->preselctBlock],this->blockset[this->selectedBlock]);
+        Block* blk1=blockset[preselctBlock];
+        Block* blk2=blockset[selectedBlock];
+        blk1->connect2(blk2);
     });
     mn.at(1).append("Scope",[this](menu::item_proxy& ip)
     {
@@ -104,7 +107,7 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
         this->preselctBlock=this->selectedBlock;
         this->selectedBlock=blk->id;
         cout<<"curid:"<<this->selectedBlock<<endl
-        <<"preid:"<<this->preselctBlock<<endl;
+            <<"preid:"<<this->preselctBlock<<endl;
     });
     blockset.push_back(blk);
     return blk;

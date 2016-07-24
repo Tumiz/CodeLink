@@ -11,6 +11,7 @@
 #include <iostream>
 #include "CodeEditor.h"
 #include "Link.h"
+#include "CodeLink.h"
 using namespace nana;
 using namespace std;
 

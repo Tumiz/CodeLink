@@ -5,17 +5,18 @@
 #include <nana/gui/widgets/panel.hpp>
 #include "Block.h"
 #include <stdlib.h>
+#include <vector>
 #include "CodeLink.h"
 using namespace nana;
 using namespace std;
-class Link:public panel<true>
+class Link
 {
     public:
         Block* b1;
         Block* b2;
         window win;
+        vector<point> curve;
         Link(window w,Block* blk1,Block* blk2);
-        void update();
         virtual ~Link();
     protected:
     private:
