@@ -30,7 +30,7 @@
 	"Block.h"
 	"Xstr.h"
 
-1469256742 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1469285013 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 
 1469261756 c:\users\umiz\documents\workspace\nanatry\include\desk.h
@@ -63,7 +63,7 @@
 1468243833 source:c:\users\umiz\documents\workspace\nanatry\src\xstring.cpp
 	"xstring.h"
 
-1468853943 c:\users\umiz\documents\workspace\nanatry\include\xstr.h
+1469291806 c:\users\umiz\documents\workspace\nanatry\include\xstr.h
 	<vector>
 	<string>
 	<iostream>
@@ -71,18 +71,23 @@
 1468849859 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
 	"Xstr.h"
 
-1469240509 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
+1469295839 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
 	"Link.h"
-	<iostream>
 
-1469239990 c:\users\umiz\documents\workspace\nanatry\include\link.h
+1469295900 c:\users\umiz\documents\workspace\nanatry\include\link.h
 	<nana/gui.hpp>
-	<nana/gui/drawing.hpp>
+	<nana/gui/place.hpp>
+	<nana/gui/widgets/panel.hpp>
 	"Block.h"
+	<stdlib.h>
+	"CodeLink.h"
 
 1469255019 source:c:\users\umiz\documents\workspace\nanatry\src\scope.cpp
 	"Scope.h"
 
 1469256822 c:\users\umiz\documents\workspace\nanatry\include\scope.h
 	"Block.h"
+
+1469292729 c:\users\umiz\documents\workspace\nanatry\include\codelink.h
+	<iostream>
 

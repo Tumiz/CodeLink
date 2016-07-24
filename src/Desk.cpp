@@ -52,9 +52,7 @@ Desk::Desk()
     });
     mn.at(1).append("Link",[this](menu::item_proxy& ip)
     {
-        Link link(*this);
-        link.connect(this->blockset[this->preselctBlock],this->blockset[this->selectedBlock]);
-        link.update();
+        Link link(*this,this->blockset[this->preselctBlock],this->blockset[this->selectedBlock]);
     });
     mn.at(1).append("Scope",[this](menu::item_proxy& ip)
     {
@@ -126,7 +124,6 @@ void Desk::loadFile(string fs)
     ifstream ifs(fs.c_str());
     string blkinfo;
     int i=0;
-    Link link(*this);
     while(ifs>>blkinfo)
     {
         Xstr xstr;

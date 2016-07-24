@@ -1,16 +1,22 @@
 #ifndef LINK_H
 #define LINK_H
 #include <nana/gui.hpp>
-#include <nana/gui/drawing.hpp>
+#include <nana/gui/place.hpp>
+#include <nana/gui/widgets/panel.hpp>
 #include "Block.h"
+#include <stdlib.h>
+#include "CodeLink.h"
 using namespace nana;
-class Link: public drawing
+using namespace std;
+class Link:public panel<true>
 {
     public:
-        Link(window w);
+        Block* b1;
+        Block* b2;
+        window win;
+        Link(window w,Block* blk1,Block* blk2);
+        void update();
         virtual ~Link();
-        void connect(Block* blk1,Block* blk2);
-        void line(point p1,point p2);
     protected:
     private:
 };
