@@ -20,16 +20,18 @@ public:
     Desk();
     virtual ~Desk();
     vector<Block*> blockset;
-    int selectedBlock;
-    int preselctBlock;
+    int curid,preid;
+    point curp;
     string file;
 protected:
 
 private:
     string pickFile(bool is_open) const;
     Block* createBlock(string s,int x,int y,int w,int h);
+    void link(Block*& blk1,Block*& blk2);
     void loadFile(string fs);
     void saveFile(string fs);
+    void clean();
 };
 
 #endif // DESK_H

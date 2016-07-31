@@ -3,18 +3,20 @@ using namespace std;
 using namespace nana;
 Block::Block(window f,int i,string s,int x,int y,int w,int h)
 {
+    cout<<0;
     name=s;
     id=i;
-    win=f;
-    create(win, rectangle(x, y, w, h));
-    caption(s);
+    win=f;cout<<1;
+    create(win, rectangle(x, y, w, h));cout<<2;
+    caption(s);cout<<3;
     dg.trigger(*this);
-    dg.target(*this);
+    dg.target(*this);cout<<4;
     events().move([this]()
     {
-        drawing d(win);
-        d.update();
-    });
+        cout<<"move "<<this->id;
+        drawing d(win);cout<<0;
+        d.update();cout<<1;
+    });cout<<5<<endl<<"-------------------"<<endl;
 }
 point Block::inport()
 {
@@ -29,6 +31,16 @@ point Block::outport()
     nana::size z=size();
     point op=point(p.x+z.width,p.y+z.height/2);
     return op;
+}
+int Block::getHeight()
+{
+    nana::size z=size();
+    return z.height;
+}
+int Block::getWidth()
+{
+    nana::size z=size();
+    return z.width;
 }
 string Block::getName()
 {
@@ -52,12 +64,18 @@ bool Block::isEmpty()
 }
 void Block::connect2(Block*& blk)
 {
-    obs.push_back(blk);
-    blk->ibs.push_back(this);
+    cout<<this<<" "<<blk<<endl;
     drawing d(win);
     d.draw([this,&blk](paint::graphics& graph)
     {
-        graph.line(outport(),blk->inport(),colors::black);
+        cout<<this<<" "<<blk;
+        if(this!=NULL&&blk!=NULL)
+        {
+            cout<<"Link "<<this->id<<" "<<blk->id<<endl;
+            graph.line(outport(),blk->inport(),colors::black);
+        }
+        else
+            cout<<"Link NULL"<<endl;
     });
     d.update();
     exec();

@@ -26,6 +26,8 @@ class Block:public button
         point inport();
         point outport();
         void setName(string s);
+        int getHeight();
+        int getWidth();
         string getName();
         string getFileName();
         bool isEmpty();

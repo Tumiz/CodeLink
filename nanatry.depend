@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1469113973 source:c:\users\umiz\documents\workspace\nanatry\main.cpp
+1469712774 source:c:\users\umiz\documents\workspace\nanatry\main.cpp
 	"Desk.h"
 
 1463285626 c:\users\umiz\documents\workspace\nanatry\include\win0.h
@@ -30,10 +30,12 @@
 	"Block.h"
 	"Xstr.h"
 
-1469356312 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1469930956 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
+	<iostream>
+	<stdlib.h>
 
-1469355568 c:\users\umiz\documents\workspace\nanatry\include\desk.h
+1469930876 c:\users\umiz\documents\workspace\nanatry\include\desk.h
 	<vector>
 	<stdlib.h>
 	<fstream>
@@ -46,10 +48,10 @@
 	"CodeEditor.h"
 	"CodeLink.h"
 
-1469356163 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
+1469640222 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
 	"Block.h"
 
-1469356157 c:\users\umiz\documents\workspace\nanatry\include\block.h
+1469931837 c:\users\umiz\documents\workspace\nanatry\include\block.h
 	<string>
 	<vector>
 	<nana/gui.hpp>
@@ -92,4 +94,10 @@
 
 1469292729 c:\users\umiz\documents\workspace\nanatry\include\codelink.h
 	<iostream>
+
+1469712623 source:c:\users\umiz\documents\workspace\nanatry\src\source.cpp
+	"Source.h"
+
+1469714342 c:\users\umiz\documents\workspace\nanatry\include\source.h
+	"Block.h"
 
