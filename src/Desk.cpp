@@ -149,7 +149,7 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
     });
     blk->events().click([this,blk]()
     {
-        cout<<"clicked:  this "<<this<<" blk "<<blk<<endl;
+        cout<<"clicked:  this "<<this<<" blk "<<blk<<endl ;
         preid=curid;
         curid=blk->id;
         cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
