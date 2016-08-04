@@ -143,33 +143,22 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
     cout<<preid<<curid<<" ";
     curp=blk->pos();
     cout<<"new:  id "<<blk->id<<" addr "<<blk<<endl<<"-------------------"<<endl;
-    drawing d(*this);
-    d.draw([&blk](paint::graphics& graph)
-    {
-        point po=blk->outport();
-        point pi=blk->inport();
-        graph.line(po,point(po.x+10,po.y),colors::black);
-        graph.line(pi,point(pi.x-10,pi.y-5),colors::black);
-        graph.line(pi,point(pi.x-10,pi.y+5),colors::black);
-    });
-    d.update();
-    exec();
     blk->events().dbl_click([blk]()
     {
         CodeEditor ce(blk);
     });
-    blk->events().mouse_down([this,blk]()
-    {
-        cout<<"click down:  this "<<this<<" blk "<<blk<<endl ;
-        preid=blk->id;
-        cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
-        curp=blk->pos();
-        cout<<"-------------------"<<endl;
-    });
+//    blk->events().mouse_down([this,blk]()
+//    {
+//        cout<<"click down:  this "<<this<<" blk "<<blk<<endl ;
+//        preid=blk->id;
+//        cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
+//        curp=blk->pos();
+//        cout<<"-------------------"<<endl;
+//    });
     blk->events().mouse_up([this,blk]()
     {
         cout<<"click up:  this "<<this<<" blk "<<blk<<endl ;
-        curid=blk->id;
+        preid=curid;curid=blk->id;
         cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
         curp=blk->pos();
         cout<<"-------------------"<<endl;
@@ -190,15 +179,11 @@ void Desk::link(Block*& blk1,Block*& blk2)
             if(blk1->id==blk2->id)
             {
                 int h=blk1->getHeight();
-                point p0= {po.x+10,po.y};
-                point p1= {po.x+10,po.y+h/2+10};
-                point p2= {pi.x-10,po.y+h/2+10};
-                point p3= {pi.x-10,po.y};
-                graph.line(po,p0,colors::black);
-                graph.line(p0,p1,colors::black);
+                point p1= {po.x,po.y+h/2+10};
+                point p2= {pi.x,po.y+h/2+10};
+                graph.line(po,p1,colors::black);
                 graph.line(p1,p2,colors::black);
-                graph.line(p2,p3,colors::black);
-                graph.line(p3,pi,colors::black);
+                graph.line(p2,pi,colors::black);
             }
             else
                 graph.line(po,pi,colors::black);
