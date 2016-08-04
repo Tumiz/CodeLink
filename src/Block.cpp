@@ -62,24 +62,7 @@ bool Block::isEmpty()
 {
     return name.empty();
 }
-void Block::connect2(Block*& blk)
-{
-    cout<<this<<" "<<blk<<endl;
-    drawing d(win);
-    d.draw([this,&blk](paint::graphics& graph)
-    {
-        cout<<this<<" "<<blk;
-        if(this!=NULL&&blk!=NULL)
-        {
-            cout<<"Link "<<this->id<<" "<<blk->id<<endl;
-            graph.line(outport(),blk->inport(),colors::black);
-        }
-        else
-            cout<<"Link NULL"<<endl;
-    });
-    d.update();
-    exec();
-}
+
 Block::~Block()
 {
     //dtor

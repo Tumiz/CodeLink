@@ -143,18 +143,35 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
     cout<<preid<<curid<<" ";
     curp=blk->pos();
     cout<<"new:  id "<<blk->id<<" addr "<<blk<<endl<<"-------------------"<<endl;
+    drawing d(*this);
+    d.draw([&blk](paint::graphics& graph)
+    {
+        point po=blk->outport();
+        point pi=blk->inport();
+        graph.line(po,point(po.x+10,po.y),colors::black);
+        graph.line(pi,point(pi.x-10,pi.y-5),colors::black);
+        graph.line(pi,point(pi.x-10,pi.y+5),colors::black);
+    });
+    d.update();
+    exec();
     blk->events().dbl_click([blk]()
     {
         CodeEditor ce(blk);
     });
-    blk->events().click([this,blk]()
+    blk->events().mouse_down([this,blk]()
     {
-        cout<<"clicked:  this "<<this<<" blk "<<blk<<endl ;
-        preid=curid;
+        cout<<"click down:  this "<<this<<" blk "<<blk<<endl ;
+        preid=blk->id;
+        cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
+        curp=blk->pos();
+        cout<<"-------------------"<<endl;
+    });
+    blk->events().mouse_up([this,blk]()
+    {
+        cout<<"click up:  this "<<this<<" blk "<<blk<<endl ;
         curid=blk->id;
         cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
         curp=blk->pos();
-        cout<<"selected: id "<<curid<<" addr "<<blk<<endl;
         cout<<"-------------------"<<endl;
     });
     return blk;
