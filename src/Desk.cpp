@@ -10,7 +10,8 @@ Desk::Desk()
     pl.field("menu") << mn;
     preid=0;
     curid=0;
-    curp=point(20,20);
+    sb.left=sb.right=sb.top=sb.bottom=false;
+    ms.leftPress=false;
     mn.push_back("File");
     mn.at(0).append("New",[this](menu::item_proxy& ip)
     {
@@ -49,20 +50,17 @@ Desk::Desk()
         cout<<1;
         stringstream blkname;
         blkname<<"block"<<id;
-        cout<<2;
-        cout<<3;
-        createBlock(blkname.str(),curp.x+10, curp.y+10, 80, 40);
+        createBlock(blkname.str(),rand()%20+10, rand()%20+10, 80, 40);
     });
     mn.at(1).append("Link",[this](menu::item_proxy& ip)
     {
         cout<<"link: "<<preid<<" "<<curid<<endl;
-        link(blockset[preid],blockset[curid]);
+        link(preid,curid);
     });
     mn.push_back("Delete");
     mn.at(2).append("Block",[this](menu::item_proxy& ip)
     {
         cout<<"delete "<<curid<<endl;
-        curp=blockset[curid]->pos();
         delete blockset[curid];
         blockset[curid]=NULL;
         curid=preid;
@@ -112,6 +110,14 @@ using namespace std;\n"
     });
     pl.collocate();
     show();
+    events().mouse_down([this](const arg_mouse& e)
+    {
+        ms.leftPress=true;
+    });
+    events().mouse_up([this](const arg_mouse& e)
+    {
+        ms.leftPress=false;
+    });
     exec();
 }
 void Desk::saveFile(string fs)
@@ -141,44 +147,35 @@ Block* Desk::createBlock(string s,int x,int y,int w,int h)
     preid=curid;
     curid=blk->id;
     cout<<preid<<curid<<" ";
-    curp=blk->pos();
     cout<<"new:  id "<<blk->id<<" addr "<<blk<<endl<<"-------------------"<<endl;
     blk->events().dbl_click([blk]()
     {
         CodeEditor ce(blk);
     });
-//    blk->events().mouse_down([this,blk]()
-//    {
-//        cout<<"click down:  this "<<this<<" blk "<<blk<<endl ;
-//        preid=blk->id;
-//        cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
-//        curp=blk->pos();
-//        cout<<"-------------------"<<endl;
-//    });
-    blk->events().mouse_up([this,blk]()
+    blk->events().mouse_down([this,blk](const arg_mouse& e)
     {
-        cout<<"click up:  this "<<this<<" blk "<<blk<<endl ;
-        preid=curid;curid=blk->id;
-        cout<<"preid "<<preid<<" "<<"curid "<<curid<<" ";
-        curp=blk->pos();
-        cout<<"-------------------"<<endl;
+        if(e.left_button)
+            preid=blk->id;
+        if(e.right_button)
+        {
+            curid=blk->id;
+            link(preid,curid);
+        }
     });
     return blk;
 }
-void Desk::link(Block*& blk1,Block*& blk2)
+void Desk::link(int id1,int id2)
 {
-    cout<<"Link "<<blk1->id<<" "<<blk2->id<<" "<<blk1<<" "<<blk2<<endl;
     drawing d(*this);
-    d.draw([&blk1,&blk2](paint::graphics& graph)
+    d.draw([this,&id1,&id2](paint::graphics& graph)
     {
-        cout<<"cLink "<<blk1->id<<" "<<blk2->id<<" "<<blk1<<" "<<blk2<<endl;
-        point po=blk1->outport();
-        point pi=blk2->inport();
-        if(blk1!=NULL&&blk2!=NULL)
+        point po=blockset[id1]->outport();
+        point pi=blockset[id2]->inport();
+        if(blockset[id1]!=NULL&&blockset[id1]!=NULL)
         {
-            if(blk1->id==blk2->id)
+            if(id1==id2)
             {
-                int h=blk1->getHeight();
+                int h=blockset[id1]->getHeight();
                 point p1= {po.x,po.y+h/2+10};
                 point p2= {pi.x,po.y+h/2+10};
                 graph.line(po,p1,colors::black);

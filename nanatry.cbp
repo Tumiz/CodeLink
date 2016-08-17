@@ -52,13 +52,11 @@
 		<Unit filename="include/CodeEditor.h" />
 		<Unit filename="include/CodeLink.h" />
 		<Unit filename="include/Desk.h" />
-		<Unit filename="include/Source.h" />
 		<Unit filename="include/Xstr.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Block.cpp" />
 		<Unit filename="src/CodeEditor.cpp" />
 		<Unit filename="src/Desk.cpp" />
-		<Unit filename="src/Source.cpp" />
 		<Unit filename="src/Xstr.cpp" />
 		<Extensions>
 			<code_completion />

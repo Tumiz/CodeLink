@@ -10,10 +10,18 @@
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/dragger.hpp>
 #include "CodeEditor.h"
+#ifndef CODELINK_H_INCLUDED
 #include "CodeLink.h"
+#endif
 using namespace nana;
 using namespace std;
-
+struct SelectBorder
+{
+    bool left;
+    bool right;
+    bool top;
+    bool bottom;
+};
 class Desk:public form
 {
 public:
@@ -21,14 +29,17 @@ public:
     virtual ~Desk();
     vector<Block*> blockset;
     int curid,preid;
-    point curp;
+    point linkp1,linkp2;
     string file;
+    SelectBorder sb;
+    MouseState ms;
+    bool flag_linking;
 protected:
 
 private:
     string pickFile(bool is_open) const;
     Block* createBlock(string s,int x,int y,int w,int h);
-    void link(Block*& blk1,Block*& blk2);
+    void link(int id1,int id2);
     void loadFile(string fs);
     void saveFile(string fs);
     void clean();
