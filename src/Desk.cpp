@@ -186,6 +186,11 @@ void Desk::clean()
         delete blockset[i];
     }
     blockset.clear();
+    for(size_t i=0; i<linkset.size(); i++)
+    {
+        delete linkset[i];
+    }
+    linkset.clear();
     drawing d(*this);
     d.clear();
     d.update();
