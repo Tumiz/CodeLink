@@ -13,7 +13,7 @@
 1463290739 source:c:\users\umiz\documents\workspace\nanatry\src\win0.cpp
 	"Win0.h"
 
-1469031225 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
+1471651847 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
 	"CodeEditor.h"
 
 1469355629 c:\users\umiz\documents\workspace\nanatry\include\codeeditor.h
@@ -30,12 +30,12 @@
 	"Block.h"
 	"Xstr.h"
 
-1471448906 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1471715293 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 	<iostream>
 	<stdlib.h>
 
-1471448530 c:\users\umiz\documents\workspace\nanatry\include\desk.h
+1471704166 c:\users\umiz\documents\workspace\nanatry\include\desk.h
 	<vector>
 	<stdlib.h>
 	<fstream>
@@ -46,18 +46,22 @@
 	<nana/gui/widgets/button.hpp>
 	<nana/gui/dragger.hpp>
 	"CodeEditor.h"
+	"Link.h"
 	"CodeLink.h"
 
-1471191505 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
+1471712535 source:c:\users\umiz\documents\workspace\nanatry\src\block.cpp
 	"Block.h"
+	"Desk.h"
+	"Link.h"
 
-1471190814 c:\users\umiz\documents\workspace\nanatry\include\block.h
+1471689684 c:\users\umiz\documents\workspace\nanatry\include\block.h
 	<string>
 	<vector>
 	<iostream>
 	<nana/gui.hpp>
 	<nana/gui/widgets/button.hpp>
 	<nana/gui/dragger.hpp>
+	"Port.h"
 
 1468245496 c:\users\umiz\documents\workspace\nanatry\include\xstring.h
 	<vector>
@@ -74,17 +78,13 @@
 1468849859 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
 	"Xstr.h"
 
-1469340539 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
+1471715902 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
 	"Link.h"
+	"Desk.h"
 
-1469340539 c:\users\umiz\documents\workspace\nanatry\include\link.h
+1471715653 c:\users\umiz\documents\workspace\nanatry\include\link.h
 	<nana/gui.hpp>
-	<nana/gui/place.hpp>
 	<nana/gui/widgets/panel.hpp>
-	"Block.h"
-	<stdlib.h>
-	<vector>
-	"CodeLink.h"
 
 1469255019 source:c:\users\umiz\documents\workspace\nanatry\src\scope.cpp
 	"Scope.h"
@@ -100,4 +100,10 @@
 
 1469714342 c:\users\umiz\documents\workspace\nanatry\include\source.h
 	"Block.h"
+
+1471669783 c:\users\umiz\documents\workspace\nanatry\include\port.h
+	<nana/gui/widgets/label.hpp>
+
+1471670102 source:c:\users\umiz\documents\workspace\nanatry\src\port.cpp
+	"Port.h"
 

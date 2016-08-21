@@ -6,6 +6,7 @@
 #include <nana/gui.hpp>
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/dragger.hpp>
+#include "Port.h"
 
 using namespace nana;
 using namespace std;
@@ -14,6 +15,7 @@ struct BlockInfo
     string name;
     string otype;
     vector<string> itype;
+
 };
 enum SelectedSide
 {
@@ -34,21 +36,26 @@ enum BlockState
     ReSizing,
     UnSelected
 };
+class Desk;
 class Block:public button
 {
     public:
         int id;
         string name;
         BlockInfo info;
-        vector<Block*> obs,ibs;
         dragger dg;
-        window win;
-        bool flag_resizing;
-        bool flag_onBorder;
+        Desk* dsk;
         BlockState bs;
-        int selectSide;
-        point inport();
-        point outport();
+        int sSide;
+        vector<Port*> inps,outps;//inport and outports
+        void clearPorts();
+        void clearInPorts();
+        void clearOutPorts();
+        void setPorts(int ins,int outs);
+        void setInports(int n);
+        void setOutports(int n);
+        point inport(int i);
+        point outport(int i);
         void setName(string s);
         int getHeight();
         int getWidth();
@@ -57,7 +64,7 @@ class Block:public button
         bool isEmpty();
         int checkBorder(int x,int y);
         nana::cursor changeCursor(int side);
-        Block(window f,int i,string s="",int x=100,int y=100,int w=80,int h=20);
+        Block(Desk* f,string s="",int x=100,int y=100,int w=80,int h=20);
         virtual ~Block();
     protected:
 

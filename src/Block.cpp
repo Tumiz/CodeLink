@@ -1,42 +1,25 @@
 #include "Block.h"
+#include "Desk.h"
+#include "Link.h"
 using namespace std;
 using namespace nana;
-Block::Block(window f,int i,string s,int x,int y,int w,int h)
+Block::Block(Desk* f,string s,int x,int y,int w,int h)
 {
+    dsk=f;
     name=s;
-    id=i;
-    win=f;
-    create(win, rectangle(x, y, w, h));
+    id=dsk->blockset.size();
+    create(*dsk, rectangle(x, y, w, h));
     caption(s);
-    cout<<s;
+    bs=UnSelected;
+    bgcolor(colors::white);
     dg.trigger(*this);
     dg.target(*this);
-    drawing d(f);
-    d.draw([this](paint::graphics& graph)
-    {
-        point po=outport();
-        point pi=inport();
-        point po0=point(po.x-10,po.y);
-        point pi0=point(pi.x+10,pi.y);
-        point pi1=point(pi0.x-8,pi0.y-2);
-        point pi2=point(pi0.x-8,pi0.y+2);
-        graph.line(po,po0,colors::black);
-        graph.line(pi,pi0,colors::black);
-        graph.line(pi0,pi1,colors::black);
-        graph.line(pi0,pi2,colors::black);
-    });
-    d.update();
     events().mouse_down([this](const arg_mouse& e)
     {
-        int x=e.pos.x;
-        int y=e.pos.y;
-        selectSide=checkBorder(x,y);
-        cout<<"selectSide"<<selectSide<<endl;
-        if(selectSide!=OutSide&&selectSide!=InSide)
+        if(e.left_button)
         {
-            dg.remove_target(*this);
-            cout<<"romove target"<<endl;
-            bs=ReSizing;
+            dsk->curblock=this;
+            cout<<name<<s(id)<<endl;
         }
     });
     events().mouse_up([this]()
@@ -44,55 +27,42 @@ Block::Block(window f,int i,string s,int x,int y,int w,int h)
         bs=UnSelected;
         dg.target(*this);
     });
-//    events().resizing([this](const arg_resizing& e)
-//    {
-//                    int w=size().width;
-//            int h=size().height;
-//            int dw,dh;
-//        switch(e.border)
-//        {
-//        case window_border::left:
-//            e.width+=2;
-//            break;
-//        case window_border::right:
-//            e.width+=2;
-//        }
-//    });
     events().mouse_move([this](const arg_mouse& e)
     {
         int x=e.pos.x;
         int y=e.pos.y;
-        cout<<e.pos.x<<" "<<e.pos.y<<" selectside: "<<selectSide<<endl;
-        if(bs!=ReSizing)
+        int side=checkBorder(x,y);
+        cursor(changeCursor(side));
+        if((side==LeftBottomCorner||side==LeftTopCorner||side==RightBottomCorner||side==RightTopCorner)&&e.left_button)
         {
-            int side=checkBorder(x,y);
-            cout<<"side:"<<side<<endl;
-            cursor(changeCursor(side));
+            bs=ReSizing;
+            sSide=side;
         }
         if(bs==ReSizing)
         {
+            dg.remove_target(*this);
+            cout<<"romove target"<<endl;
             int w=size().width;
             int h=size().height;
             int dw,dh;
-            if(selectSide==LeftSide||selectSide==LeftTopCorner||selectSide==LeftBottomCorner)
+            if(sSide==LeftTopCorner||sSide==LeftBottomCorner)
             {
                 dw=2-x;
-                move(pos().x-dw,pos().y);
                 w=w+dw;
+                move(pos().x-dw,pos().y);
             }
-            if(selectSide==RightSide||selectSide==RightTopCorner||selectSide==RightBottomCorner)
+            if(sSide==RightTopCorner||sSide==RightBottomCorner)
             {
                 dw=x-w+2;
                 w=w+dw;
             }
-            if(selectSide==TopSide||selectSide==LeftTopCorner||selectSide==RightTopCorner)
+            if(sSide==LeftTopCorner||sSide==RightTopCorner)
             {
                 dh=2-y;
-                move(pos().x,pos().y-dh);
                 h=h+dh;
-                cout<<" dh:"<<dh<<" h:"<<h<<endl;
+                move(pos().x,pos().y-dh);
             }
-            if(selectSide==BottomSide||selectSide ==LeftBottomCorner||selectSide==RightBottomCorner)
+            if(sSide ==LeftBottomCorner||sSide==RightBottomCorner)
             {
                 dh=y-h+2;
                 h=h+dh;
@@ -100,29 +70,73 @@ Block::Block(window f,int i,string s,int x,int y,int w,int h)
             w=max(12,w);
             h=max(12,h);
             size(rectangle(2,2,w,h));
+            setPorts(info.itype.size(),1);
         }
-        if(selectSide!=OutSide)
-        {
-            drawing d(win);
-            d.update();
-        }
-
     });
-    cout<<"-------------------"<<endl;
+    events().resizing([this]{drawing{*dsk} .update();});
+    events().move([this]{drawing{*dsk} .update();});
 }
-point Block::inport()
+void Block::setInports(int n)
 {
-    point p=pos();
-    nana::size z=size();
-    point ip=point(p.x-10,p.y+z.height/2);
-    return ip;
+    clearInPorts();
+    nana::size siz=size();
+    int dy=siz.height/(n+1);
+    int y=dy;
+    for(int i=0; i<n; i++)
+    {
+        Port* P=new Port(this,InPort,i,0,y);
+        inps.push_back(P);
+        y=y+dy;
+    }
 }
-point Block::outport()
+void Block::setOutports(int n)
 {
-    point p=pos();
-    nana::size z=size();
-    point op=point(p.x+z.width+10,p.y+z.height/2);
-    return op;
+    clearOutPorts();
+    nana::size siz=size();
+    int dy=siz.height/(n+1);
+    int y=dy;
+    for(int i=0; i<n; i++)
+    {
+        Port* P=new Port(this,OutPort,i,siz.width-8,y);
+        outps.push_back(P);
+        y=y+dy;
+    }
+}
+void Block::setPorts(int ins,int outs)
+{
+    setInports(ins);
+    setOutports(outs);
+}
+void Block::clearPorts()
+{
+    clearInPorts();
+    clearOutPorts();
+}
+void Block::clearInPorts()
+{
+    for(unsigned int i=0; i<inps.size(); i++)
+    {
+        delete inps[i];
+    }
+    inps.clear();
+}
+void Block::clearOutPorts()
+{
+    for(unsigned int i=0; i<outps.size(); i++)
+    {
+        delete outps[i];
+    }
+    outps.clear();
+}
+point Block::inport(int i)
+{
+    point p=pos()+inps[i]->cpos();
+    return p;
+}
+point Block::outport(int i)
+{
+    point p=pos()+outps[i]->cpos();
+    return p;
 }
 int Block::getHeight()
 {
@@ -156,34 +170,35 @@ bool Block::isEmpty()
 }
 int Block::checkBorder(int x,int y)
 {
+    int dz=4;
     int w=size().width;
     int h=size().height;
-    if(x>=w-4&&y>=h-4)
+    if(x<0||x>w||y<0||y>h)
+        return OutSide;
+    if(x>=w-dz&&y>=h-dz)
         return RightBottomCorner;
-    if(x<=4&&y>=h-4)
+    if(x<=dz&&y>=h-dz)
         return LeftBottomCorner;
-    if(x<=4&&y<=4)
+    if(x<=dz&&y<=dz)
         return LeftTopCorner;
-    if(x>=w-4&&y<=4)
+    if(x>=w-dz&&y<=dz)
         return RightTopCorner;
-    if(x>=w-4)
+    if(x>=w-dz)
         return RightSide;
-    if(x<=4)
+    if(x<=dz)
         return LeftSide;
-    if(y>=h-4)
+    if(y>=h-dz)
         return BottomSide;
-    if(y<=4)
+    if(y<=dz)
         return TopSide;
-    if(x>4&&x<w-4&&y>4&&y<h-4)
-        return InSide;
-    return OutSide;
+    return InSide;
 }
 nana::cursor Block::changeCursor(int side)
 {
-    if(side==LeftSide||side==RightSide)
-        return nana::cursor::size_we;
-    if(side==TopSide||side==BottomSide)
-        return nana::cursor::size_ns;
+//    if(side==LeftSide||side==RightSide)
+//        return nana::cursor::size_we;
+//    if(side==TopSide||side==BottomSide)
+//        return nana::cursor::size_ns;
     if(side==LeftTopCorner)
         return nana::cursor::size_top_left;
     if(side==RightTopCorner)
@@ -196,5 +211,5 @@ nana::cursor Block::changeCursor(int side)
 }
 Block::~Block()
 {
-    //dtor
+    clearPorts();
 }

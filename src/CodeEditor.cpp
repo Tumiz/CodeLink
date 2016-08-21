@@ -91,6 +91,7 @@ void CodeEditor::_m_make_menus()
         {
             blk->bgcolor(colors::white);
             blk->setName(ret);
+            blk->setPorts(blk->info.itype.size(),1);
             string oldf=textbox_.filename();
             string newf=blk->getFileName();
             if(oldf!=newf)

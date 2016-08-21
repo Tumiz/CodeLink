@@ -1,0 +1,30 @@
+#include "Port.h"
+using namespace std;
+using namespace nana;
+Port::Port(window f,int t,int i,int x,int y)
+{
+    type=t;
+    id=i;
+    create(f, rectangle(x, y-2, 8, 5));
+    bgcolor(colors::sky_blue);
+    borderless(true);
+    if(t==OutPort)
+    {
+        
+}
+point Port::cpos()
+{
+    switch(type)
+    {
+    case InPort:
+        return pos()+point(0,2);
+    case OutPort:
+        return pos()+point(8,2);
+    default:
+        return point(0,0);
+    }
+}
+Port::~Port()
+{
+    //dtor
+}

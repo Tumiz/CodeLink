@@ -1,17 +1,16 @@
 #include "Desk.h"
 using namespace std;
 using namespace nana;
-Desk::Desk()
+Desk::Desk():form(API::make_center(600,400))
 {
     caption(L"CodeLink");//name it
+    bgcolor(colors::white_smoke);
     place pl(*this);
     menubar mn(*this);
     pl.div("<vertical <menu weight=25>>");
     pl.field("menu") << mn;
-    preid=0;
-    curid=0;
-    sb.left=sb.right=sb.top=sb.bottom=false;
-    ms.leftPress=false;
+    linking=false;
+    readConfig();
     mn.push_back("File");
     mn.at(0).append("New",[this](menu::item_proxy& ip)
     {
@@ -24,6 +23,7 @@ Desk::Desk()
         {
             clean();
             loadFile(fs);
+            cfg.file=fs;
         }
     });
     mn.at(0).append("Save",[this](menu::item_proxy& ip)
@@ -38,37 +38,161 @@ Desk::Desk()
         caption("CodeLink -"+file);
         saveFile(file);
     });
-    mn.at(0).append("Exit",[](menu::item_proxy& ip)
-    {
-        API::exit();
-    });
+    mn.at(0).append("Exit",[](menu::item_proxy& ip){API::exit();});
     mn.push_back("Add");
     mn.at(1).append("Block",[this](menu::item_proxy& ip)
     {
-        cout<<"add block ";
-        int id=int(blockset.size());
-        cout<<1;
         stringstream blkname;
-        blkname<<"block"<<id;
-        createBlock(blkname.str(),rand()%20+10, rand()%20+10, 80, 40);
-    });
-    mn.at(1).append("Link",[this](menu::item_proxy& ip)
-    {
-        cout<<"link: "<<preid<<" "<<curid<<endl;
-        link(preid,curid);
+        blkname<<"block"<<blockset.size();
+        newBlock(blkname.str(),rand()%20+10, rand()%20+30, 80, 30);
     });
     mn.push_back("Delete");
-    mn.at(2).append("Block",[this](menu::item_proxy& ip)
-    {
-        cout<<"delete "<<curid<<endl;
-        delete blockset[curid];
-        blockset[curid]=NULL;
-        curid=preid;
-    });
+    mn.at(2).append("Block",[this](menu::item_proxy& ip){deleteBlock();});
+    mn.at(2).append("Link",[this](menu::item_proxy& ip){deleteLink();});
     mn.push_back("Run");
-    mn.at(3).append("Run",[this](menu::item_proxy& ip)
+    mn.at(3).append("Run",[this](menu::item_proxy& ip){run();});
+    pl.collocate();
+    show();
+    events().mouse_down([this](const arg_mouse& e)
     {
+        if(e.left_button)
+        {
+            point p=e.pos;
+            for(unsigned int i=0; i<linkset.size(); i++)
+            {
+                Link* l=linkset[i];
+                if(l!=nullptr&&l->isPointOnLink(p))
+                {
+                    l->lcolor=colors::red;
+                    curlink->lcolor=colors::sky_blue;
+                    curlink=l;
+                    drawing(*this).update();
+                    cout<<s(curlink)<<endl;
+                    break;
+                }
+            }
+        }
+    });
+    if(!cfg.file.empty())
+        loadFile(cfg.file);
+    exec();
+}
+void Desk::readConfig()
+{
+    ifstream rcfg("config.txt");
+    rcfg>>cfg.file;
+    rcfg.close();
+}
+void Desk::saveConfig()
+{
+    ofstream wcfg("config.txt");
+    wcfg<<cfg.file;
+    wcfg.close();
+}
+void Desk::saveFile(string fs)
+{
+    ofstream ofs(fs.c_str());
+    for(size_t i=0; i<blockset.size(); i++)
+    {
+        Block *b=blockset[i];
+        if(b!=nullptr)
+        {
+            point p=b->pos();
+            nana::size siz=b->size();
+            ofs<<b->name<<','<<p.x<<','<<p.y<<','<<siz.width<<','<<siz.height<<','<<b->info.otype<<','<<b->info.itype<<endl;
+        }
+    }
+    ofs.close();
+}
+string Desk::pickFile(bool is_open) const
+{
+    filebox fbox(is_open);
+    fbox.add_filter("csv", "*.csv");
+    fbox.add_filter("All Files", "*.*");
+    return (fbox.show() ? fbox.file() : "" );
+}
+Block* Desk::newBlock(string s,int x,int y,int w,int h)
+{
+    curblock=new Block(this,s,x,y,w,h);
+    blockset.push_back(curblock);
+    cout<<"new "<<curblock->name<<s(curblock->id)<<endl;
+    curblock->events().dbl_click([this]()
+    {
+        CodeEditor ce(curblock);
+    });
+    return curblock;
+}
+void Desk::deleteBlock()
+{
+        if(curblock!=nullptr)
+        {
+            int curid=curblock->id;
+            cout<<"delete "<<curblock->name<<s(curid)<<endl;
+            delete curblock;
+            blockset[curid]=nullptr;
+            curblock=nullptr;
+        }
+}
+Link* Desk::newLink(int B,int P)
+{
+    linking=true;
+    curlink=new Link(this,B,P);
+    linkset.push_back(curlink);
+    return curlink;
+}
+void Desk::deleteLink()
+{
+        if(curlink!=nullptr)
+        {
+            cout<<"delete Link"<<curlink->B1<<curlink->P1<<curlink->B2<<curlink->P2<<endl;
+            int curid=curlink->id;
+            delete curlink;
+            linkset[curid]=nullptr;
+            curlink=nullptr;
+        }
+}
+void Desk::loadFile(string fs)
+{
+    file=fs;
+    caption("CodeLink -"+fs);
+    ifstream ifs(fs.c_str());
+    string blkinfo;
+    int i=0;
+    while(ifs>>blkinfo)
+    {
+        Xstr xstr;
         string name;
+        int x,y,w,h;
+        stringstream ssinfo(xstr.replace(blkinfo,","," "));
+        ssinfo>>name>>x>>y>>w>>h;
+        Block *b=newBlock(name,x, y, w, h);
+        string itypes;
+        ssinfo>>b->info.otype>>itypes;
+        b->info.itype=xstr.split(itypes,"|");
+        b->setPorts(b->info.itype.size(),1);
+        cout<<b->name<<','<<x<<','<<y<<','<<b->info.otype<<','<<xstr.print(b->info.itype)<<endl;
+        i++;
+    }
+    cout<<"-----------------------------"<<endl;
+    show();
+    exec();
+}
+void Desk::clean()
+{
+    file="";
+    caption("CodeLink -new");
+    for(size_t i=0; i<blockset.size(); i++)
+    {
+        delete blockset[i];
+    }
+    blockset.clear();
+    drawing d(*this);
+    d.clear();
+    d.update();
+}
+void Desk::run()
+{
+     string name;
         if(file.empty())
             name="Generated";
         else
@@ -107,129 +231,8 @@ using namespace std;\n"
         ofs.close();
         system(("g++ "+name+".cpp -o gen").c_str());
         system("gen");
-    });
-    pl.collocate();
-    show();
-    events().mouse_down([this](const arg_mouse& e)
-    {
-        ms.leftPress=true;
-    });
-    events().mouse_up([this](const arg_mouse& e)
-    {
-        ms.leftPress=false;
-    });
-    exec();
-}
-void Desk::saveFile(string fs)
-{
-    Xstr x;
-    ofstream ofs(fs.c_str());
-    for(size_t i=0; i<blockset.size(); i++)
-    {
-        Block *b=blockset[i];
-        point p=blockset[i]->pos();
-        ofs<<b->name<<','<<p.x<<','<<p.y<<','<<b->info.otype<<','<<x.print(b->info.itype)<<endl;
-    }
-    ofs.close();
-}
-string Desk::pickFile(bool is_open) const
-{
-    filebox fbox(is_open);
-    fbox.add_filter("csv", "*.csv");
-    fbox.add_filter("All Files", "*.*");
-    return (fbox.show() ? fbox.file() : "" );
-}
-Block* Desk::createBlock(string s,int x,int y,int w,int h)
-{
-    Block *blk=new Block(*this,blockset.size(),s,x,y,w,h);
-    blockset.push_back(blk);
-    cout<<preid<<curid<<" ";
-    preid=curid;
-    curid=blk->id;
-    cout<<preid<<curid<<" ";
-    cout<<"new:  id "<<blk->id<<" addr "<<blk<<endl<<"-------------------"<<endl;
-    blk->events().dbl_click([blk]()
-    {
-        CodeEditor ce(blk);
-    });
-    blk->events().mouse_down([this,blk](const arg_mouse& e)
-    {
-        if(e.left_button)
-            preid=blk->id;
-        if(e.right_button)
-        {
-            curid=blk->id;
-            link(preid,curid);
-        }
-    });
-    return blk;
-}
-void Desk::link(int id1,int id2)
-{
-    drawing d(*this);
-    d.draw([this,&id1,&id2](paint::graphics& graph)
-    {
-        point po=blockset[id1]->outport();
-        point pi=blockset[id2]->inport();
-        if(blockset[id1]!=NULL&&blockset[id1]!=NULL)
-        {
-            if(id1==id2)
-            {
-                int h=blockset[id1]->getHeight();
-                point p1= {po.x,po.y+h/2+10};
-                point p2= {pi.x,po.y+h/2+10};
-                graph.line(po,p1,colors::black);
-                graph.line(p1,p2,colors::black);
-                graph.line(p2,pi,colors::black);
-            }
-            else
-                graph.line(po,pi,colors::black);
-        }
-        else
-            cout<<"Link NULL"<<endl;
-    });
-    d.update();
-    exec();
-}
-void Desk::loadFile(string fs)
-{
-    file=fs;
-    caption("CodeLink -"+fs);
-    ifstream ifs(fs.c_str());
-    string blkinfo;
-    int i=0;
-    while(ifs>>blkinfo)
-    {
-        Xstr xstr;
-        string name;
-        int x,y;
-        stringstream ssinfo(xstr.replace(blkinfo,","," "));
-        ssinfo>>name>>x>>y;
-        Block *b=createBlock(name,x, y, 80, 20);
-        string itypes;
-        ssinfo>>b->info.otype>>itypes;
-        b->info.itype=xstr.split(itypes,"|");
-        cout<<b->name<<','<<x<<','<<y<<','<<b->info.otype<<','<<xstr.print(b->info.itype)<<endl;
-        i++;
-    }
-    cout<<"-----------------------------"<<endl;
-    show();
-    exec();
-}
-void Desk::clean()
-{
-    file="";
-    caption("CodeLink -new");
-    for(size_t i=0; i<blockset.size(); i++)
-    {
-        delete blockset[i];
-    }
-    blockset.clear();
-    drawing d(*this);
-    d.clear();
-    d.update();
 }
 Desk::~Desk()
 {
-    //dtor
+    saveConfig();
 }
