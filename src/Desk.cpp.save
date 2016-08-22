@@ -63,10 +63,7 @@ Desk::Desk():form(API::make_center(600,400))
                 Link* l=linkset[i];
                 if(l!=nullptr&&l->isPointOnLink(p))
                 {
-                    l->lcolor=colors::red;
-                    curlink->lcolor=colors::sky_blue;
-                    curlink=l;
-                    drawing(*this).update();
+                    l->
                     cout<<s(curlink)<<endl;
                     break;
                 }
@@ -176,7 +173,6 @@ void Desk::loadFile(string fs)
     cout<<"-----------------------------"<<endl;
     show();
     exec();
-    this.
 }
 void Desk::clean()
 {

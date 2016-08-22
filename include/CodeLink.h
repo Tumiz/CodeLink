@@ -26,5 +26,11 @@ inline ostream &operator << (ostream& s, size& p)
      s<<"["<<p.width<<","<<p.height<<"]";
      return s;
  }
-
+static double dist(point p1,point p2)
+{
+    double dx=p1.x-p2.x;
+    double dy=p1.y-p2.y;
+    double d2=dx*dx+dy*dy;
+    return sqrt(d2);
+}
 #endif // CODELINK_H_INCLUDED

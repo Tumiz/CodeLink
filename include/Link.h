@@ -21,20 +21,22 @@ public:
     int P1;
     int B2;
     int P2;
-    color lcolor;
+
     point startp,endp;
     drawing::diehard_t drawfunc;
     Link(Desk* dk,int blockid,int outportid);
     void endAt(int blockid,int inportid);
     bool isPointOnLink(point p);
     point projectOnLink(point p);
-    double dist(point p1,point p2);
+    void setColor(color c);
+    void setSelected();
     LinkRange range();
     virtual ~Link();
 
 protected:
 
 private:
+    color lcolor;
 };
 
 #endif // LINK_H

@@ -47,11 +47,11 @@
 	<string>
 	<iostream>
 
-1471786555 c:\users\umiz\documents\workspace\nanatry\include\link.h
+1471881426 c:\users\umiz\documents\workspace\nanatry\include\link.h
 	<nana/gui.hpp>
 	<nana/gui/widgets/widget.hpp>
 
-1471764737 c:\users\umiz\documents\workspace\nanatry\include\codelink.h
+1471880826 c:\users\umiz\documents\workspace\nanatry\include\codelink.h
 	<iostream>
 	<math.h>
 
@@ -63,7 +63,7 @@
 1471651847 source:c:\users\umiz\documents\workspace\nanatry\src\codeeditor.cpp
 	"CodeEditor.h"
 
-1471794955 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
+1471881875 source:c:\users\umiz\documents\workspace\nanatry\src\desk.cpp
 	"Desk.h"
 	<iostream>
 	<stdlib.h>
@@ -75,7 +75,7 @@
 1468849859 source:c:\users\umiz\documents\workspace\nanatry\src\xstr.cpp
 	"Xstr.h"
 
-1471786613 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
+1471881609 source:c:\users\umiz\documents\workspace\nanatry\src\link.cpp
 	"Link.h"
 	"Desk.h"
 

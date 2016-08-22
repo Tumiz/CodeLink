@@ -37,6 +37,20 @@ void Link::endAt(int blockid,int inportid)
     });
     update();
 }
+void Link::setColor(color c)
+{
+    lcolor=c;
+}
+void Link::setSelected()
+{
+    if(this!=dsk->curlink)
+    {
+        setColor(colors::orange);
+        dsk->curlink->setColor(colors::sky_blue);
+        dsk->curlink=this;
+        update();
+    }
+}
 LinkRange Link::range()
 {
     LinkRange r;
@@ -62,13 +76,6 @@ LinkRange Link::range()
     }
     return r;
 }
-double Link::dist(point p1,point p2)
-{
-    double dx=p1.x-p2.x;
-    double dy=p1.y-p2.y;
-    double d2=dx*dx+dy*dy;
-    return sqrt(d2);
-}
 bool Link::isPointOnLink(point p)
 {
     point pr=projectOnLink(p);
@@ -76,8 +83,7 @@ bool Link::isPointOnLink(point p)
     cout<<dist(p,pr)<<" "<<s(p)<<s(pr)<<s(r.xmin)<<s(r.xmax)<<s(r.ymax)<<s(r.ymin)<<endl;
     if(pr.x>=r.xmin&&pr.x<=r.xmax&&pr.y>=r.ymin&&pr.y<=r.ymax&&dist(p,pr)<3)
         return true;
-    else
-        return false;
+    return false;
 }
 point Link::projectOnLink(point p)
 {

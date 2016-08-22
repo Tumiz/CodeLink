@@ -63,11 +63,9 @@ Desk::Desk():form(API::make_center(600,400))
                 Link* l=linkset[i];
                 if(l!=nullptr&&l->isPointOnLink(p))
                 {
-                    l->lcolor=colors::red;
-                    curlink->lcolor=colors::sky_blue;
-                    curlink=l;
-                    drawing(*this).update();
-                    cout<<s(curlink)<<endl;
+                    l->setSelected();
+                    int id=l->id;
+                    cout<<s(id)<<s(curlink)<<endl;
                     break;
                 }
             }
