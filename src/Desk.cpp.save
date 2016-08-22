@@ -66,7 +66,7 @@ Desk::Desk():form(API::make_center(600,400))
                     l->lcolor=colors::red;
                     curlink->lcolor=colors::sky_blue;
                     curlink=l;
-                    drawing()
+                    drawing(*this).update();
                     cout<<s(curlink)<<endl;
                     break;
                 }
@@ -176,6 +176,7 @@ void Desk::loadFile(string fs)
     cout<<"-----------------------------"<<endl;
     show();
     exec();
+    this.
 }
 void Desk::clean()
 {
@@ -186,6 +187,11 @@ void Desk::clean()
         delete blockset[i];
     }
     blockset.clear();
+    for(size_t i=0; i<linkset.size(); i++)
+    {
+        delete linkset[i];
+    }
+    linkset.clear();
     drawing d(*this);
     d.clear();
     d.update();
