@@ -18,7 +18,7 @@ Link::Link(Desk* dk,int blockid,int outportid):drawing(*dk)
     id=dsk->linkset.size();
     B1=blockid;
     P1=outportid;
-    lcolor=colors::sky_blue;
+    setSelected();
 }
 void Link::endAt(int blockid,int inportid)
 {
@@ -46,7 +46,8 @@ void Link::setSelected()
     if(this!=dsk->curlink)
     {
         setColor(colors::orange);
-        dsk->curlink->setColor(colors::sky_blue);
+        if(dsk->curlink!=nullptr)
+            dsk->curlink->setColor(colors::sky_blue);
         dsk->curlink=this;
         update();
     }

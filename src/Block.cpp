@@ -75,6 +75,12 @@ Block::Block(Desk* f,string s,int x,int y,int w,int h)
     });
     events().resizing([this]{drawing{*dsk} .update();});
     events().move([this]{drawing{*dsk} .update();});
+    events().key_press([this](const arg_keyboard& e)
+    {
+        cout<<"key_press"<<endl;
+        if(e.key==keyboard::os_del)
+            dsk->deleteBlock();
+    });
 }
 void Block::setInports(int n)
 {

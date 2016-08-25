@@ -66,7 +66,7 @@ bool CodeEditor::_m_ask_save()
 
 void CodeEditor::_m_make_menus()
 {
-    menubar_.push_back("&File");
+    menubar_.push_back("File");
     menubar_.at(0).append("Load", [this](menu::item_proxy& ip)
     {
         if (_m_ask_save())
@@ -74,13 +74,6 @@ void CodeEditor::_m_make_menus()
             auto fs = _m_pick_file(true);
             if (fs.size())
                 textbox_.load(fs.data());
-            string ret=readFirstLine().name;
-            blk->setName(ret);
-            caption(blk->name+error);
-        }
-    });
-    menubar_.at(0).append("Apply", [this](menu::item_proxy&)
-    {
         blk->info=readFirstLine();
         string ret=blk->info.name;
         if(ret.empty())
@@ -99,8 +92,9 @@ void CodeEditor::_m_make_menus()
             textbox_.store(newf);
         }
         caption(blk->name+error);
+        }
     });
-    menubar_.push_back("F&ormat");
+    menubar_.push_back("Format");
     menubar_.at(1).append("Line Wrap", [this](menu::item_proxy& ip)
     {
         textbox_.line_wrapped(ip.checked());

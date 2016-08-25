@@ -10,6 +10,7 @@ Desk::Desk():form(API::make_center(600,400))
     pl.div("<vertical <menu weight=25>>");
     pl.field("menu") << mn;
     linking=false;
+    curlink=nullptr;
     readConfig();
     mn.push_back("File");
     mn.at(0).append("New",[this](menu::item_proxy& ip)
@@ -38,7 +39,10 @@ Desk::Desk():form(API::make_center(600,400))
         caption("CodeLink -"+file);
         saveFile(file);
     });
-    mn.at(0).append("Exit",[](menu::item_proxy& ip){API::exit();});
+    mn.at(0).append("Exit",[](menu::item_proxy& ip)
+    {
+        API::exit();
+    });
     mn.push_back("Add");
     mn.at(1).append("Block",[this](menu::item_proxy& ip)
     {
@@ -47,10 +51,19 @@ Desk::Desk():form(API::make_center(600,400))
         newBlock(blkname.str(),rand()%20+10, rand()%20+30, 80, 30);
     });
     mn.push_back("Delete");
-    mn.at(2).append("Block",[this](menu::item_proxy& ip){deleteBlock();});
-    mn.at(2).append("Link",[this](menu::item_proxy& ip){deleteLink();});
+    mn.at(2).append("Block",[this](menu::item_proxy& ip)
+    {
+        deleteBlock();
+    });
+    mn.at(2).append("Link",[this](menu::item_proxy& ip)
+    {
+        deleteLink();
+    });
     mn.push_back("Run");
-    mn.at(3).append("Run",[this](menu::item_proxy& ip){run();});
+    mn.at(3).append("Run",[this](menu::item_proxy& ip)
+    {
+        run();
+    });
     pl.collocate();
     show();
     events().mouse_down([this](const arg_mouse& e)
@@ -64,12 +77,19 @@ Desk::Desk():form(API::make_center(600,400))
                 if(l!=nullptr&&l->isPointOnLink(p))
                 {
                     l->setSelected();
+                    focus();
                     int id=l->id;
                     cout<<s(id)<<s(curlink)<<endl;
                     break;
                 }
             }
         }
+    });
+    events().key_press([this](const arg_keyboard& e)
+    {
+        cout<<"key_press"<<endl;
+        if(e.key==keyboard::os_del)
+            deleteLink();
     });
     if(!cfg.file.empty())
         loadFile(cfg.file);
@@ -122,14 +142,14 @@ Block* Desk::newBlock(string s,int x,int y,int w,int h)
 }
 void Desk::deleteBlock()
 {
-        if(curblock!=nullptr)
-        {
-            int curid=curblock->id;
-            cout<<"delete "<<curblock->name<<s(curid)<<endl;
-            delete curblock;
-            blockset[curid]=nullptr;
-            curblock=nullptr;
-        }
+    if(curblock!=nullptr)
+    {
+        int curid=curblock->id;
+        cout<<"delete "<<curblock->name<<s(curid)<<endl;
+        delete curblock;
+        blockset[curid]=nullptr;
+        curblock=nullptr;
+    }
 }
 Link* Desk::newLink(int B,int P)
 {
@@ -140,14 +160,14 @@ Link* Desk::newLink(int B,int P)
 }
 void Desk::deleteLink()
 {
-        if(curlink!=nullptr)
-        {
-            cout<<"delete Link"<<curlink->B1<<curlink->P1<<curlink->B2<<curlink->P2<<endl;
-            int curid=curlink->id;
-            delete curlink;
-            linkset[curid]=nullptr;
-            curlink=nullptr;
-        }
+    if(curlink!=nullptr)
+    {
+        cout<<"delete Link"<<curlink->B1<<curlink->P1<<curlink->B2<<curlink->P2<<endl;
+        int curid=curlink->id;
+        delete curlink;
+        linkset[curid]=nullptr;
+        curlink=nullptr;
+    }
 }
 void Desk::loadFile(string fs)
 {
@@ -195,45 +215,45 @@ void Desk::clean()
 }
 void Desk::run()
 {
-     string name;
-        if(file.empty())
-            name="Generated";
-        else
-        {
-            size_t dotpos=file.find(".csv");
-            name=file.erase(dotpos,4);
-        }
+    string name;
+    if(file.empty())
+        name="Generated";
+    else
+    {
+        size_t dotpos=file.find(".csv");
+        name=file.erase(dotpos,4);
+    }
 
-        stringstream ss;
-        for(size_t i=0; i<blockset.size(); i++)
+    stringstream ss;
+    for(size_t i=0; i<blockset.size(); i++)
+    {
+        ifstream ifs((blockset[i]->name+".cpp").c_str());
+        string temp;
+        for(int j=0; ifs; j++)
         {
-            ifstream ifs((blockset[i]->name+".cpp").c_str());
-            string temp;
-            for(int j=0; ifs; j++)
-            {
-                getline(ifs,temp,'\n');
-                ss<<temp;
-                cout<<temp<<j;
-            }
-            ifs.close();
+            getline(ifs,temp,'\n');
+            ss<<temp;
+            cout<<temp<<j;
         }
-        cout<<ss.str();
-        ofstream ofs(name+".cpp");
-        ofs<<"\
+        ifs.close();
+    }
+    cout<<ss.str();
+    ofstream ofs(name+".cpp");
+    ofs<<"\
 #include <iostream>\n\
 #include <stdlib.h>\n\
 using namespace std;\n"
-           <<ss.str()
-           <<"int main()\n\
+       <<ss.str()
+       <<"int main()\n\
 {\n\
     for(int i=0;i<100;i++)\n\
            cout<<k(i)<<endl;\n\
     system(\"pause\");\n\
     return 0;\n\
 }";
-        ofs.close();
-        system(("g++ "+name+".cpp -o gen").c_str());
-        system("gen");
+    ofs.close();
+    system(("g++ "+name+".cpp -o gen").c_str());
+    system("gen");
 }
 Desk::~Desk()
 {
