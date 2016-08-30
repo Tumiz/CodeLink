@@ -16,7 +16,7 @@ Port::Port(Block* b,int t,int i,int x,int y)
     {
         events().mouse_down([this](const arg_mouse& e)
         {
-            blk->dsk->newLink(blk->id,id);
+            Link* l=new Link(blk->dsk,blk->id,id);
             cout<<blk->name<<" id:"<<blk->dsk->curlink->B1<<" OutPort:"<<blk->dsk->curlink->P1<<endl;
         });
     }

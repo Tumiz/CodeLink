@@ -1,6 +1,7 @@
 #include "Block.h"
 #include "Desk.h"
 #include "Link.h"
+#include "CodeEditor.h"
 using namespace std;
 using namespace nana;
 Block::Block(Desk* f,string s,int x,int y,int w,int h)
@@ -8,17 +9,24 @@ Block::Block(Desk* f,string s,int x,int y,int w,int h)
     dsk=f;
     name=s;
     id=dsk->blockset.size();
+    dsk->blockset.push_back(this);
     create(*dsk, rectangle(x, y, w, h));
     caption(s);
     bs=UnSelected;
     bgcolor(colors::white);
     dg.trigger(*this);
     dg.target(*this);
+    events().dbl_click([this]()
+    {
+        CodeEditor ce(this);
+    });
     events().mouse_down([this](const arg_mouse& e)
     {
         if(e.left_button)
         {
             dsk->curblock=this;
+            if(dsk->curlink!=nullptr)
+                dsk->curlink->setUnSelected();
             cout<<name<<s(id)<<endl;
         }
     });

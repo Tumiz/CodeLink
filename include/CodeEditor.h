@@ -34,7 +34,7 @@ public:
 protected:
 
 private:
-    string _m_pick_file(bool is_open) const;
+    string _m_pick_file(bool is_open);
     bool _m_ask_save();
     void _m_make_menus();
     BlockInfo readFirstLine();

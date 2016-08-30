@@ -33,10 +33,12 @@ CodeEditor::CodeEditor(Block* p)
     exec();
 }
 
-string CodeEditor::_m_pick_file(bool is_open) const
+string CodeEditor::_m_pick_file(bool is_open)
 {
     filebox fbox(*this, is_open);
-    fbox.add_filter("Text", "*.cpp");
+    fbox.add_filter("C++ File", "*.cpp;*.hpp");
+    fbox.add_filter("C File", "*.c");
+    fbox.add_filter("header File","*.h");
     fbox.add_filter("All Files", "*.*");
 
     return (fbox.show() ? fbox.file() : "" );

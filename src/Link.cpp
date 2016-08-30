@@ -18,6 +18,8 @@ Link::Link(Desk* dk,int blockid,int outportid):drawing(*dk)
     id=dsk->linkset.size();
     B1=blockid;
     P1=outportid;
+    dsk->linking=true;
+    dsk->linkset.push_back(this);
     setSelected();
 }
 void Link::endAt(int blockid,int inportid)
@@ -51,6 +53,25 @@ void Link::setSelected()
         dsk->curlink=this;
         update();
     }
+}
+void Link::setUnSelected()
+{
+    dsk->curlink->setColor(colors::sky_blue);
+    dsk->curlink=nullptr;
+    update();
+}
+bool Link::isSelected()
+{
+    return lcolor==colors::orange;
+}
+void Link::onClick()
+{
+    if(isSelected())
+        setUnSelected();
+    else
+        setSelected();
+    dsk->focus();
+    cout<<s(id)<<s(dsk->curlink)<<endl;
 }
 LinkRange Link::range()
 {

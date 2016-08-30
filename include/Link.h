@@ -30,6 +30,9 @@ public:
     point projectOnLink(point p);
     void setColor(color c);
     void setSelected();
+    void setUnSelected();
+    bool isSelected();
+    void onClick();
     LinkRange range();
     virtual ~Link();
 

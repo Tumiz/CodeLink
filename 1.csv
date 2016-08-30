@@ -1,2 +1,3 @@
-sum,297,126,74,56,int,int|int
-multi,649,115,63,80,int,int|int
+B,or,263,98,80,30,bool,bool|bool
+B,sin,119,107,80,30,double,double
+L,1,0,0,0

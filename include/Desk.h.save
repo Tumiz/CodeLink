@@ -27,6 +27,7 @@ public:
     bool linking;
     vector<Link*> linkset;
     vector<Block*> blockset;
+    vector<
     point curp;
     Block* curblock;
     Link* curlink;
@@ -35,8 +36,9 @@ public:
     Config cfg;
     Desk();
     Block* newBlock(string s,int x,int y,int w,int h);
+    void deleteBlock();
     Link* newLink(int B,int P);
-    void 
+    void deleteLink();
     virtual ~Desk();
 
 protected:

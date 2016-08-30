@@ -34,9 +34,7 @@ public:
     bool flag_linking;
     Config cfg;
     Desk();
-    Block* newBlock(string s,int x,int y,int w,int h);
     void deleteBlock();
-    Link* newLink(int B,int P);
     void deleteLink();
     virtual ~Desk();
 

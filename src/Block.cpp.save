@@ -5,9 +5,10 @@ using namespace std;
 using namespace nana;
 Block::Block(Desk* f,int i,string s,int x,int y,int w,int h)
 {
+    dsk=f;
     name=s;
     id=i;
-    dsk=f;
+    dsk->blockset.push_back(this);
     create(*dsk, rectangle(x, y, w, h));
     caption(s);
     bs=UnSelected;
@@ -18,8 +19,10 @@ Block::Block(Desk* f,int i,string s,int x,int y,int w,int h)
     {
         if(e.left_button)
         {
-            dsk->cur;
-            cout<<blk->name<<s(curid)<<endl;
+            dsk->curblock=this;
+            if(dsk->curlink!=nullptr)
+                dsk->curlink->setUnSelected();
+            cout<<name<<s(id)<<endl;
         }
     });
     events().mouse_up([this]()
@@ -75,6 +78,12 @@ Block::Block(Desk* f,int i,string s,int x,int y,int w,int h)
     });
     events().resizing([this]{drawing{*dsk} .update();});
     events().move([this]{drawing{*dsk} .update();});
+    events().key_press([this](const arg_keyboard& e)
+    {
+        cout<<"key_press"<<endl;
+        if(e.key==keyboard::os_del)
+            dsk->deleteBlock();
+    });
 }
 void Block::setInports(int n)
 {
@@ -84,17 +93,7 @@ void Block::setInports(int n)
     int y=dy;
     for(int i=0; i<n; i++)
     {
-        Port* P=new Port(*this,InPort,i,0,y);
-        P->events().mouse_enter([this,P](const arg_mouse& e)
-        {
-            if(dsk->linking&&e.left_button)
-            {
-                dsk->curlink->endAt(id,P->id);
-                dsk->linking=false;
-                cout<<name<<" id:"<<dsk->curlink->B2<<" InPort:"<<dsk->curlink->P2<<endl;
-            }
-
-        });
+        Port* P=new Port(this,InPort,i,0,y);
         inps.push_back(P);
         y=y+dy;
     }
@@ -107,14 +106,7 @@ void Block::setOutports(int n)
     int y=dy;
     for(int i=0; i<n; i++)
     {
-        Port* P=new Port(*this,OutPort,i,siz.width-8,y);
-        P->events().mouse_down([this,P](const arg_mouse& e)
-        {
-            dsk->linking=true;
-            Link* lk=new Link(dsk,id,P->id);
-            dsk->curlink=lk;
-            cout<<name<<" id:"<<dsk->curlink->B1<<" OutPort:"<<dsk->curlink->P1<<endl;
-        });
+        Port* P=new Port(this,OutPort,i,siz.width-8,y);
         outps.push_back(P);
         y=y+dy;
     }

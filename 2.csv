@@ -1,3 +1,6 @@
-block0,77,91,,
-block1,10,84,,
-block2,34,119,,
+B,or,272,140,80,30,bool,bool|bool
+B,sin,122,111,80,30,double,double
+B,sum,124,168,80,30,int,int|int
+L,0,0,0,0
+L,1,0,0,0
+L,2,0,0,1

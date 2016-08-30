@@ -1,1 +1,4 @@
-block0,39,89,,
+B,sin,101,124,80,30,double,double
+B,sum,292,133,80,30,int,int|int
+L,0,0,1,1
+L,0,0,1,0
