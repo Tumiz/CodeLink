@@ -20,12 +20,23 @@ Link::Link(Desk* dk,int blockid,int outportid):drawing(*dk)
     P1=outportid;
     dsk->linking=true;
     dsk->linkset.push_back(this);
-    setSelected();
+    focus();
+    drawfunc=draw_diehard([this](paint::graphics& graph)
+    {
+        Block* b1=dsk->blockset[B1];
+        if(b1!=nullptr)
+        {
+            startp=b1->outport(P1);
+            endp=dsk->curp;
+            graph.line(startp,endp,lcolor);
+        }
+    });
 }
 void Link::endAt(int blockid,int inportid)
 {
     B2=blockid;
     P2=inportid;
+    erase(drawfunc);
     drawfunc=draw_diehard([this](paint::graphics& graph)
     {
         Block* b1=dsk->blockset[B1];
@@ -43,33 +54,33 @@ void Link::setColor(color c)
 {
     lcolor=c;
 }
-void Link::setSelected()
+void Link::focus()
 {
-    if(this!=dsk->curlink)
+    setColor(colors::orange);
+    if(dsk->curlink!=this)
     {
-        setColor(colors::orange);
         if(dsk->curlink!=nullptr)
             dsk->curlink->setColor(colors::sky_blue);
         dsk->curlink=this;
-        update();
     }
+    update();
 }
-void Link::setUnSelected()
+void Link::unFocus()
 {
-    dsk->curlink->setColor(colors::sky_blue);
+    setColor(colors::sky_blue);
     dsk->curlink=nullptr;
     update();
 }
-bool Link::isSelected()
+bool Link::focused()
 {
     return lcolor==colors::orange;
 }
 void Link::onClick()
 {
-    if(isSelected())
-        setUnSelected();
+    if(focused())
+        unFocus();
     else
-        setSelected();
+        focus();
     dsk->focus();
     cout<<s(id)<<s(dsk->curlink)<<endl;
 }

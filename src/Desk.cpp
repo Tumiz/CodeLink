@@ -78,6 +78,15 @@ Desk::Desk():form(API::make_center(600,400))
             }
         }
     });
+    events().mouse_move([this](const arg_mouse& e)
+    {
+        if(e.left_button)
+        {
+            curp=e.pos;
+            drawing(*this).update();
+            cout<<s(curp)<<endl;
+        }
+    });
     events().key_press([this](const arg_keyboard& e)
     {
         cout<<"key_press"<<endl;
@@ -124,7 +133,7 @@ void Desk::loadFile(string fs)
             ssinfo>>b->info.otype>>itypes;
             b->info.itype=xstr.split(itypes,"|");
             b->setPorts(b->info.itype.size(),1);
-            cout<<b->name<<','<<x<<','<<y<<','<<b->info.otype<<','<<xstr.print(b->info.itype)<<endl;
+            cout<<b->caption()<<','<<x<<','<<y<<','<<b->info.otype<<','<<xstr.print(b->info.itype)<<endl;
         }
         else
         {
@@ -135,6 +144,7 @@ void Desk::loadFile(string fs)
         }
     }
     ifs.close();
+    curlink->unFocus();
     cout<<"-----------------------------"<<endl;
     show();
     exec();
@@ -152,7 +162,7 @@ void Desk::saveFile(string fs)
             idmap.push_back(j);
             point p=b->pos();
             nana::size siz=b->size();
-            ofs<<"B"<<","<<b->name<<','<<p.x<<','<<p.y<<','<<siz.width<<','<<siz.height<<','<<b->info.otype<<','<<b->info.itype<<endl;
+            ofs<<"B,"<<b->caption()<<','<<p.x<<','<<p.y<<','<<siz.width<<','<<siz.height<<','<<b->info.otype<<','<<b->info.itype<<endl;
             j++;
         }
         else
@@ -163,7 +173,7 @@ void Desk::saveFile(string fs)
         Link* l=linkset[i];
         if(l!=nullptr)
         {
-            ofs<<"L"<<","<<idmap[l->B1]<<","<<l->P1<<","<<idmap[l->B2]<<","<<l->P2<<endl;
+            ofs<<"L,"<<idmap[l->B1]<<","<<l->P1<<","<<idmap[l->B2]<<","<<l->P2<<endl;
         }
     }
     ofs.close();
@@ -180,7 +190,7 @@ void Desk::deleteBlock()
     if(curblock!=nullptr)
     {
         int curid=curblock->id;
-        cout<<"delete "<<curblock->name<<s(curid)<<endl;
+        cout<<"delete "<<curblock->caption()<<s(curid)<<endl;
         delete curblock;
         blockset[curid]=nullptr;
         curblock=nullptr;
@@ -202,19 +212,16 @@ void Desk::clean()
 {
     file="";
     caption("CodeLink -new");
-    for(size_t i=0; i<blockset.size(); i++)
-    {
-        delete blockset[i];
-    }
-    blockset.clear();
     for(size_t i=0; i<linkset.size(); i++)
     {
         delete linkset[i];
     }
     linkset.clear();
-    drawing d(*this);
-    d.clear();
-    d.update();
+    for(size_t i=0; i<blockset.size(); i++)
+    {
+        delete blockset[i];
+    }
+    blockset.clear();
 }
 void Desk::run()
 {
@@ -230,7 +237,7 @@ void Desk::run()
     stringstream ss;
     for(size_t i=0; i<blockset.size(); i++)
     {
-        ifstream ifs((blockset[i]->name+".cpp").c_str());
+        ifstream ifs((blockset[i]->caption()+".cpp").c_str());
         string temp;
         for(int j=0; ifs; j++)
         {

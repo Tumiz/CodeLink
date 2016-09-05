@@ -7,7 +7,6 @@ using namespace nana;
 Block::Block(Desk* f,string s,int x,int y,int w,int h)
 {
     dsk=f;
-    name=s;
     id=dsk->blockset.size();
     dsk->blockset.push_back(this);
     create(*dsk, rectangle(x, y, w, h));
@@ -26,8 +25,8 @@ Block::Block(Desk* f,string s,int x,int y,int w,int h)
         {
             dsk->curblock=this;
             if(dsk->curlink!=nullptr)
-                dsk->curlink->setUnSelected();
-            cout<<name<<s(id)<<endl;
+                dsk->curlink->unFocus();
+            cout<<caption()<<s(id)<<endl;
         }
     });
     events().mouse_up([this]()
@@ -162,25 +161,13 @@ int Block::getWidth()
     nana::size z=size();
     return z.width;
 }
-string Block::getName()
-{
-    return name;
-}
-void Block::setName(string s)
-{
-    if(s!="")
-    {
-        name=s;
-        caption(s);
-    }
-}
 string Block::getFileName()
 {
-    return name+".cpp";
+    return caption()+".cpp";
 }
 bool Block::isEmpty()
 {
-    return name.empty();
+    return caption().empty();
 }
 int Block::checkBorder(int x,int y)
 {
@@ -209,10 +196,6 @@ int Block::checkBorder(int x,int y)
 }
 nana::cursor Block::changeCursor(int side)
 {
-//    if(side==LeftSide||side==RightSide)
-//        return nana::cursor::size_we;
-//    if(side==TopSide||side==BottomSide)
-//        return nana::cursor::size_ns;
     if(side==LeftTopCorner)
         return nana::cursor::size_top_left;
     if(side==RightTopCorner)

@@ -74,3 +74,12 @@ bool Xstr::space(string s)//empty is also true
     }
     return true;
 }
+bool Xstr::isNumber(const string& s)
+{
+    for(int i=0;i<s.length();i++)
+    {
+        if(!isdigit(s[i]))
+            return false;
+    }
+    return true;
+}

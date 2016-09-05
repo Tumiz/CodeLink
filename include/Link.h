@@ -29,9 +29,9 @@ public:
     bool isPointOnLink(point p);
     point projectOnLink(point p);
     void setColor(color c);
-    void setSelected();
-    void setUnSelected();
-    bool isSelected();
+    void focus();
+    void unFocus();
+    bool focused();
     void onClick();
     LinkRange range();
     virtual ~Link();

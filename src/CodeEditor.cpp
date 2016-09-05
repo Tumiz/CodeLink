@@ -4,7 +4,7 @@ using namespace std;
 CodeEditor::CodeEditor(Block* p)
 {
     blk=p;
-    if(!blk->getName().empty())
+    if(!blk->caption().empty())
         textbox_.load(blk->getFileName());
     textbox_.borderless(true);
     textbox_.indention(true);
@@ -28,7 +28,7 @@ CodeEditor::CodeEditor(Block* p)
         if (!_m_ask_save())
             arg.cancel = true;
     });
-    caption(blk->name);
+    caption(blk->caption());
     show();
     exec();
 }
@@ -55,6 +55,8 @@ bool CodeEditor::_m_ask_save()
         switch (box.show())
         {
         case msgbox::pick_yes:
+            if(format()==CodeLink::function)
+                readFirstLine();
             textbox_.store(fs.data());
             break;
         case msgbox::pick_no:
@@ -76,24 +78,24 @@ void CodeEditor::_m_make_menus()
             auto fs = _m_pick_file(true);
             if (fs.size())
                 textbox_.load(fs.data());
-        blk->info=readFirstLine();
-        string ret=blk->info.name;
-        if(ret.empty())
-        {
-            blk->bgcolor(colors::red);
-        }
-        else
-        {
-            blk->bgcolor(colors::white);
-            blk->setName(ret);
-            blk->setPorts(blk->info.itype.size(),1);
-            string oldf=textbox_.filename();
-            string newf=blk->getFileName();
-            if(oldf!=newf)
-                remove(oldf.c_str());
-            textbox_.store(newf);
-        }
-        caption(blk->name+error);
+            blk->info=readFirstLine();
+            string ret=blk->info.name;
+            if(ret.empty())
+            {
+                blk->bgcolor(colors::red);
+            }
+            else
+            {
+                blk->bgcolor(colors::white);
+                blk->caption(ret);
+                blk->setPorts(blk->info.itype.size(),1);
+                string oldf=textbox_.filename();
+                string newf=blk->getFileName();
+                if(oldf!=newf)
+                    remove(oldf.c_str());
+                textbox_.store(newf);
+            }
+            caption(blk->caption()+error);
         }
     });
     menubar_.push_back("Format");
@@ -107,9 +109,8 @@ void CodeEditor::_m_make_menus()
         format();
     });
 }
-void CodeEditor::format()
+int CodeEditor::format()
 {
-    Xstr X;
     string s;
     stringstream temp;
     vector<string> oki;
@@ -118,45 +119,54 @@ void CodeEditor::format()
     int decoded=0;
     for(int i=0; textbox_.getline(i,s); i++)
     {
-        if(!X.space(s))
+        if(Xstr::space(s))
+            continue;
+        if(Xstr::isNumber(s))
         {
-            if(!X.space(s)&&decoded==0)
-            {
-                oki=X.split(s,"(");
-                cout<<"oki:"<<X.print(oki)<<endl;
-                vo=X.split(oki[0]," ");
-                cout<<"vo:"<<X.print(vo)<<endl;
-                vo=X.voidempty(vo);
-                cout<<"vo:"<<X.print(vo)<<endl;
-                string is=oki[1].substr(0,oki[1].find(")"));
-                vector<string> vis=X.split(is,",");
-                for(size_t i=0; i<vis.size(); i++)
-                {
-                    vector<string> v=X.split(vis[i]," ");
-                    v=X.voidempty(v);
-                    vi.push_back(v);
-                }
-                temp<<X.print(vo," ")<<"(";
-                for(size_t i=0; i<vi.size(); i++)
-                {
-                    if(i==0)
-                        temp<<X.print(vi[i]," ");
-                    else
-                        temp<<","<<X.print(vi[i]," ");
-                }
-                temp<<")";
-                decoded++;
-            }
-            else if(decoded>0)
-                temp<<endl<<s;
+            blk->caption(s);
+            blk->setPorts(0,1);
+            return CodeLink::constant;
         }
+        if(decoded==0)
+        {
+            oki=Xstr::split(s,"(");
+            cout<<"oki:"<<Xstr::print(oki)<<endl;
+            vo=Xstr::split(oki[0]," ");
+            cout<<"vo:"<<Xstr::print(vo)<<endl;
+            vo=Xstr::voidempty(vo);
+            cout<<"vo:"<<Xstr::print(vo)<<endl;
+            string is=oki[1].substr(0,oki[1].find(")"));
+            vector<string> vis=Xstr::split(is,",");
+            for(size_t i=0; i<vis.size(); i++)
+            {
+                vector<string> v=Xstr::split(vis[i]," ");
+                v=Xstr::voidempty(v);
+                vi.push_back(v);
+            }
+            temp<<Xstr::print(vo," ")<<"(";
+            for(size_t i=0; i<vi.size(); i++)
+            {
+                if(i==0)
+                    temp<<Xstr::print(vi[i]," ");
+                else
+                    temp<<","<<Xstr::print(vi[i]," ");
+            }
+            temp<<")";
+            decoded++;
+        }
+        if(decoded>0)
+            temp<<endl<<s;
     }
     cout<<temp.str()<<endl<<"----------------------"<<endl;
     string fs=textbox_.filename();
-    ofstream ofs(fs);
-    ofs<<temp.str();
-    ofs.close();
-    textbox_.load(fs);
+    if(!fs.empty())
+    {
+        ofstream ofs(fs);
+        ofs<<temp.str();
+        ofs.close();
+        textbox_.load(fs);
+    }
+    return CodeLink::function;
 }
 BlockInfo CodeEditor::readFirstLine()
 {
@@ -170,17 +180,16 @@ BlockInfo CodeEditor::readFirstLine()
         error= " -First line is empty";
         return blkinfo;
     }
-    Xstr X;
-    vector<string> oki=X.split(s,"(");//strings before and after (
-    cout<<"oki:"<<X.print(oki)<<endl;
+    vector<string> oki=Xstr::split(s,"(");//strings before and after (
+    cout<<"oki:"<<Xstr::print(oki)<<endl;
     if(oki.size()<2)
     {
         error= " -No (";
         return blkinfo;
     }
-    vector<string> vo=X.split(oki[0]," ");//strings before (
-    vo=X.voidempty(vo);
-    cout<<"vo:"<<X.print(vo)<<endl;
+    vector<string> vo=Xstr::split(oki[0]," ");//strings before (
+    vo=Xstr::voidempty(vo);
+    cout<<"vo:"<<Xstr::print(vo)<<endl;
     if(vo.size()<2)
     {
         error= " -No return type";
@@ -193,24 +202,24 @@ BlockInfo CodeEditor::readFirstLine()
     }
     string is=oki[1].substr(0,oki[1].find(")"));
     cout<<"is:"<<is<<endl;
-    vector<string> vi=X.split(is,",");
-    cout<<"vi:"<<X.print(vi)<<endl;
+    vector<string> vi=Xstr::split(is,",");
+    cout<<"vi:"<<Xstr::print(vi)<<endl;
     size_t in=vi.size();
-    if(in!=1||!X.space(vi[0]))
+    if(in!=1||!Xstr::space(vi[0]))
     {
         for(size_t i=0; i<in; i++)
         {
-            if(X.space(vi[i]))
+            if(Xstr::space(vi[i]))
             {
                 error=" -No input before or after ,";
                 return blkinfo;
             }
-            vector<string> in=X.split(vi[i]," ");
-            vector<string> inv=X.voidempty(in);
+            vector<string> in=Xstr::split(vi[i]," ");
+            vector<string> inv=Xstr::voidempty(in);
             blkinfo.itype.push_back(inv[0]);
         }
     }
-    cout<<"itypes:"<<X.print(blkinfo.itype)<<endl
+    cout<<"itypes:"<<Xstr::print(blkinfo.itype)<<endl
         <<"----------------------"<<endl;
     blkinfo.name=vo[vo.size()-1];
     blkinfo.otype=vo[vo.size()-2];
@@ -218,5 +227,5 @@ BlockInfo CodeEditor::readFirstLine()
 }
 CodeEditor::~CodeEditor()
 {
-    //dtor
+
 }

@@ -15,7 +15,7 @@ struct BlockInfo
     string name;
     string otype;
     vector<string> itype;
-    vector
+
 };
 enum SelectedSide
 {
@@ -41,7 +41,6 @@ class Block:public button
 {
     public:
         int id;
-        string name;
         BlockInfo info;
         dragger dg;
         Desk* dsk;
@@ -56,10 +55,8 @@ class Block:public button
         void setOutports(int n);
         point inport(int i);
         point outport(int i);
-        void setName(string s);
         int getHeight();
         int getWidth();
-        string getName();
         string getFileName();
         bool isEmpty();
         int checkBorder(int x,int y);

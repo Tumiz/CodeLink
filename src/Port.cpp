@@ -16,8 +16,8 @@ Port::Port(Block* b,int t,int i,int x,int y)
     {
         events().mouse_down([this](const arg_mouse& e)
         {
-            Link* l=new Link(blk->dsk,blk->id,id);
-            cout<<blk->name<<" id:"<<blk->dsk->curlink->B1<<" OutPort:"<<blk->dsk->curlink->P1<<endl;
+            blk->dsk->curlink=new Link(blk->dsk,blk->id,id);
+            cout<<blk->caption()<<" id:"<<blk->dsk->curlink->B1<<" OutPort:"<<blk->dsk->curlink->P1<<endl;
         });
     }
     if(t==InPort)
@@ -26,9 +26,12 @@ Port::Port(Block* b,int t,int i,int x,int y)
         {
             if(blk->dsk->linking&&e.left_button)
             {
-                blk->dsk->curlink->endAt(blk->id,id);
-                blk->dsk->linking=false;
-                cout<<blk->name<<" id:"<<blk->dsk->curlink->B2<<" InPort:"<<blk->dsk->curlink->P2<<endl;
+                if(blk->dsk->curlink!=nullptr)
+                {
+                    blk->dsk->curlink->endAt(blk->id,id);
+                    blk->dsk->linking=false;
+                    cout<<blk->caption()<<" id:"<<blk->dsk->curlink->B2<<" InPort:"<<blk->dsk->curlink->P2<<endl;
+                }
             }
         });
     }

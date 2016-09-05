@@ -14,6 +14,16 @@
 #include "Xstr.h"
 using namespace nana;
 using namespace std;
+namespace CodeLink
+{
+    enum BlockType
+{
+    constant,
+    function,
+    scope
+};
+}
+
 class CodeEditor: public form
 {
     enum FirstLine
@@ -38,7 +48,7 @@ private:
     bool _m_ask_save();
     void _m_make_menus();
     BlockInfo readFirstLine();
-    void format();
+    int format();
 };
 
 #endif // CODEEDITOR_H
