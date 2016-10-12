@@ -6,6 +6,8 @@ Developers can develop, test, and even sumulate their codes or blocks in CodeLin
 CodeLink should be able to generate executable file or script, which can be run on target machine. 
 Tip: Source code is in a CodeBlocks project. 
 
+To take advantage of QT chart and QT 3D, future work will depended on QT. All functions in this project will be rewritten in its QT version.
+
 It is a big idea, I need more people to help me to realize it.
 
 ![github](https://github.com/Tumiz/CodeLink/raw/master/sample.PNG)
