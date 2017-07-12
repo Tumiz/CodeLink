@@ -21,3 +21,6 @@ Previously, I always try to make a tool like Simulink. Though a prototype was ca
 Another problem is that I have no knowledge about communication between processes. Zmq is taken in consideration, but it is still complex. QProcess provide a easier way to master communication between just two processes. Both giving input and getting output can be implemented within four or five code lines.
 
 CodeLink needs two processes basically. One in the front as GUI process, call compiler to compile C/C++ code, input and output. Another at the background as an operation process, execute binary file, calculate and feedback result. I compared serval compliers, GCC is old, msvc lacks documents, so I am willing to choose Clang. If you have better idea, pls contect me via hh11698@163.com. Thank you for your attention.
+
+7.12.2017
+I uploaded a related project https://github.com/Tumiz/CppTestBench. It is a prototype of CodeLink with a simple UI.
